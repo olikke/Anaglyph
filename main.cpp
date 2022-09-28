@@ -2,9 +2,11 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QObject>
+#include <QTimer>
 #include "imageprovider.h"
-#include "grabbgst.h"
 #include "imagepro.h"
+#include "grabOpenCV.h"
+#include "anaglyphVideo.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,19 +18,26 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine * engine=new QQmlApplicationEngine(&app);
     QQmlContext *context = engine->rootContext();
 
-    GrabbGst* grabber1=new GrabbGst(&app);
-    context->setContextProperty("grabber1",grabber1);
-    ImageProvider* provider1=new ImageProvider(&app,QSize(1920,1080));
-    context->setContextProperty("provider1",provider1);
-    engine->addImageProvider("mlive1",provider1);
-    QObject::connect(grabber1,&GrabbGst::newSample,provider1,&ImageProvider::updateImage);
+    QTimer* timer=new QTimer(&app);
+    timer->setInterval(80);
+    context->setContextProperty("timer",timer);
 
-    GrabbGst* grabber2=new GrabbGst(&app);
-    context->setContextProperty("grabber2",grabber2);
-    ImageProvider* provider2=new ImageProvider(&app,QSize(1920,1080));
-    context->setContextProperty("provider2",provider2);
-    engine->addImageProvider("mlive2",provider2);
-    QObject::connect(grabber2,&GrabbGst::newSample,provider2,&ImageProvider::updateImage);
+    GrabOpenCV* left=new GrabOpenCV(1,&app);
+    context->setContextProperty("leftGrab",left);
+    QObject::connect(timer,&QTimer::timeout,left,&GrabOpenCV::execute);
+
+    GrabOpenCV* right=new GrabOpenCV(2,&app);
+    context->setContextProperty("rightGrab",right);
+    QObject::connect(timer,&QTimer::timeout,right,&GrabOpenCV::execute);
+
+    AnaglyphVideo* anaglyphVideo=new AnaglyphVideo(&app);
+    QObject::connect(left,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::leftSample);
+    QObject::connect(right,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::rightSample);
+
+    ImageProvider* provider=new ImageProvider(&app,QSize(1920,1080));
+    context->setContextProperty("videoProvider",provider);
+    engine->addImageProvider("mlive",provider);
+    QObject::connect(anaglyphVideo,&AnaglyphVideo::newSample,provider,&ImageProvider::updateImage);
 
     ImagePro* imagePro=new ImagePro(&app);
     context->setContextProperty("imagePro",imagePro);
@@ -37,10 +46,8 @@ int main(int argc, char *argv[])
     engine->addImageProvider("mlive3",stereoProvider);
     QObject::connect(imagePro,&ImagePro::newSample,stereoProvider,&ImageProvider::updateImage);
 
-
     engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine->rootObjects().isEmpty())  return -1;
-
 
     return app.exec();
 }

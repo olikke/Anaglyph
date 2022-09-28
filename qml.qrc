@@ -2,9 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>StereoRec.qml</file>
-        <file>OneRec.qml</file>
         <file>StereoPhoto.qml</file>
+        <file>StereoVideo.qml</file>
     </qresource>
     <qresource prefix="/cross"/>
 </RCC>

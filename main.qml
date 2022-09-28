@@ -30,7 +30,7 @@ Window {
         anchors.fill: parent
         anchors.margins: 10
 
-        StereoRec{
+        StereoVideo{
 
         }
 

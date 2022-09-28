@@ -4,6 +4,7 @@ QT += multimedia
 QT += widgets
 CONFIG += link_pkgconfig
 PKGCONFIG += opencv
+QT += concurrent
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -24,7 +25,8 @@ SOURCES += \
     imagepro.cpp \
     imageprovider.cpp \
     main.cpp \
-    grabbgst.cpp
+    anaglyphVideo.cpp \
+    grabOpenCV.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,7 +44,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     imagepro.h \
     imageprovider.h \
-    grabbgst.h
+    anaglyphVideo.h \
+    grabOpenCV.h
 
 unix|win32: LIBS += -lgstreamer-1.0
 

@@ -92,8 +92,8 @@ Column {
 
     Image{
         id: im
-        width: 565
-        height: 848
+        width: 1920/2//565
+        height: 1080/2//848
         cache: false
         smooth: true
         autoTransform: false
@@ -101,16 +101,9 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         source: "image://mlive3/image"
         function reload() {
-            console.log("hello")
             source= ""
             source = "image://mlive3/image"
         }
-//        function resize() {
-//            console.log("hello1")
-////            size=stereoProvider.size
-////            width=size.width
-////            height=size.height
-//        }
     }
 
 
