@@ -1,9 +1,5 @@
 #include "anaglyphVideo.h"
 
-AnaglyphVideo::AnaglyphVideo(QObject *parent) : QObject(parent)
-{
-}
-
 void AnaglyphVideo::leftSample(cv::Mat im)
 {
     left=im.clone();
@@ -35,38 +31,37 @@ void AnaglyphVideo::timeOut()
     RGB[2]=cv::Mat::zeros(right.rows,right.cols,CV_8UC1);
     merge(RGB,3,right1);
 
-    if (shiftLeft>0) {
-        left1=left1(cv::Rect(0,0,left1.cols-shiftLeft,left1.rows));
-        right1=right1(cv::Rect(shiftLeft,0,right1.cols-shiftLeft,right1.rows));
+    if (horizontShift>0) {
+        left1=left1(cv::Rect(0,0,left1.cols-horizontShift,left1.rows));
+        right1=right1(cv::Rect(horizontShift,0,right1.cols-horizontShift,right1.rows));
+    }
+    if (horizontShift<0) {
+        left1=left1(cv::Rect(-horizontShift,0,left1.cols+horizontShift,left1.rows));
+        right1=right1(cv::Rect(0,0,right1.cols+horizontShift,right1.rows));
+    }
+    if (verticalShift>0) {
+        left1=left1(cv::Rect(0,0,left1.cols,left1.rows-verticalShift));
+        right1=right1(cv::Rect(0,verticalShift,right1.cols,right1.rows-verticalShift));
+
     }
 
-    if (shiftLeft<0) {
-        left1=left1(cv::Rect(-shiftLeft,0,left1.cols+shiftLeft,left1.rows));
-        right1=right1(cv::Rect(0,0,right1.cols+shiftLeft,right1.rows));
+#ifdef TEST
+    cv::Rect leftRect=cv::Rect(200,200,left1.cols/2-205,left1.rows-400);
+    cv::rectangle(left1,leftRect,cv::Scalar(0, 0, 255),4);
+    cv::rectangle(right1,cv::Point(right1.cols/2+5,200),cv::Point(right1.cols-200,right1.rows-200),cv::Scalar(255, 0255, 0),4);
+#endif
+
+    if (leftIncline>0) {
+            cv::Vector<cv::Point> src;
+            cv::Vector<cv::Point> dst;
+        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.0);
     }
-
-    if (!qFuzzyIsNull(angle)) {
-        cv::Point center=cv::Point(left1.cols/2,left1.rows/2);
-        cv::Mat rotate=cv::getRotationMatrix2D(center,angle,1.);
-        cv::warpAffine(left1,left1,rotate,cv::Size());
-        rotate=cv::getRotationMatrix2D(center,-angle,1.);
-        cv::warpAffine(right1,right1,rotate,cv::Size());
-    }
-
-
-
-
-
 
     cv::Mat result=cv::Mat(right1.rows,right1.cols,CV_8UC4);
 
-   cv::addWeighted(right1, 1, left1, 1, 0,result);
+    cv::addWeighted(right1, 1, left1, 1, 0,result);
 
-   cv::cvtColor(result,result,CV_BGR2RGB);
-
-   resultQIM=QImage((uchar*)result.data, result.cols, result.rows, result.step, QImage::Format_RGB888);
-
-   emit newSample(resultQIM);
-
-
+    cv::cvtColor(result,result,CV_BGR2RGB);
+    resultQIM=QImage((uchar*)result.data, result.cols, result.rows, result.step, QImage::Format_RGB888);
+    emit newSample(resultQIM);
 }

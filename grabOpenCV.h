@@ -1,13 +1,14 @@
 #pragma once
 
 #include <QObject>
+#include <QDebug>
 #include <opencv2/opencv.hpp>
 
 class GrabOpenCV : public QObject
 {
     Q_OBJECT
 public:
-    explicit GrabOpenCV(int number, QObject *parent = nullptr);
+    GrabOpenCV(int number, QObject *parent = nullptr);
     ~GrabOpenCV();
     Q_INVOKABLE void start(int numb);
 
@@ -19,5 +20,6 @@ public slots:
 
 private:
     cv::VideoCapture cap;
-    int numb;
+    bool test=false;
+    QString testName;
 };

@@ -4,14 +4,20 @@
 #include <opencv2/opencv.hpp>
 #include <QtConcurrent>
 
+#define TEST
+
 class AnaglyphVideo : public QObject
 {
     Q_OBJECT
 public:
-    explicit AnaglyphVideo(QObject *parent = nullptr);
+    explicit AnaglyphVideo(QObject *parent = nullptr): QObject(parent) {}
 
-    Q_INVOKABLE void setShiftLeft(int value) {shiftLeft=value;}
-    Q_INVOKABLE void setAngle(double value) {angle=value;}
+    Q_INVOKABLE void setHorizontShift(int value) {horizontShift=value;}
+    Q_INVOKABLE void setVerticalShift(int value) {verticalShift=value;}
+    Q_INVOKABLE void setLeftIncline(double value) {leftIncline=value;}
+    Q_INVOKABLE void setRightIncline(double value) {rightIncline=value;}
+    Q_INVOKABLE void setLeftTurn(double value) {leftTurn=value;}
+    Q_INVOKABLE void setRightTurn(double value) {rightTurn=value;}
 
 signals:
     void newSample(QImage im);
@@ -25,7 +31,12 @@ private:
     bool leftNew=false;
     bool rightNew=false;
     void timeOut();
-    int shiftLeft=0;
-    double angle=0.;
+    int horizontShift=0;
+    int verticalShift=0;
+    double leftIncline=0.;
+    double rightIncline=0.;
+    double leftTurn=0.;
+    double rightTurn=0.;
+    cv::Rect calcIncline(const cv::Rect &before);
 };
 

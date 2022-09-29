@@ -5,16 +5,25 @@ import QtQuick.Controls.Material 2.3
 import QtGraphicalEffects 1.0
 
 Row{
-    id: horizontalAngle
+    id: root
     width: parent.width
     height: implicitHeight
+
+    signal leftSignal(int value)
+    signal rightSignal(int value)
 
     property alias source1: im1.source
     property alias source2: im2.source
     property alias rotation1: co1.rotation
     property alias rotation2: co2.rotation
+    property var from
+    property var to
+    property var step
+    property bool alwaysLocked: false
 
-     property int sp: parent.width-left.width-right.width
+    property int sp: parent.width-left.width-right.width
+
+    property bool locked: alwaysLocked? true : false
 
     Item{
         id: left
@@ -52,7 +61,7 @@ Row{
 
             Text{
                 id: txt1
-                text: sl1.value.toString()
+                text: sl1.value.toFixed(1)
                 font.pixelSize: 16
                 font.bold: true
                 color: accent
@@ -68,11 +77,18 @@ Row{
             orientation: Qt.Vertical
             width: 30
             height: parent.height
-            from: -200
-            stepSize: 1
-            to:200
+            from: root.from
+            stepSize: root.step
+            to:root.to
             value: 0
-            onValueChanged: anaglyph.setShiftLeft(value)
+            onValueChanged: {
+                if (locked) {
+                    sl2.value=sl1.value
+                    leftSignal(value/root.step)
+                    rightSignal(value/root.step)
+                } else
+                leftSignal(value/root.step)
+            }
         }
     }
 
@@ -84,7 +100,9 @@ Row{
              anchors.verticalCenter: parent.verticalCenter
              width: 48
              height: 48
-             icon.source: "qrc:/icon/lock.png"
+             icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
+             onClicked: locked=!locked
+             enabled: !root.alwaysLocked
          }
     }
 
@@ -123,7 +141,7 @@ Row{
 
             Text{
                 id: txt2
-                text: sl2.value.toString()
+                text: sl2.value.toFixed(1)
                 font.pixelSize: 16
                 font.bold: true
                 color: accent
@@ -139,11 +157,18 @@ Row{
             orientation: Qt.Vertical
             width: 30
             height: parent.height
-            from: -200
-            stepSize: 1
-            to:200
+            from: root.from
+            stepSize: root.step
+            to:root.to
             value: 0
-            onValueChanged: anaglyph.setShiftLeft(value)
+            onValueChanged: {
+                if (locked) {
+                    sl1.value=sl2.value
+                    leftSignal(value/root.step)
+                    rightSignal(value/root.step)
+                } else
+                rightSignal(value/root.step)
+            }
         }
     }
 }
