@@ -3,8 +3,15 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>StereoPhoto.qml</file>
+        <file>icon/glass.png</file>
+        <file>icon/frame.png</file>
         <file>StereoVideo.qml</file>
-        <file>glass.png</file>
+        <file>icon/frame_shiftH.png</file>
+        <file>icon/frame_shiftV.png</file>
+        <file>icon/frame_angleV.png</file>
+        <file>icon/lock.png</file>
+        <file>icon/unlock.png</file>
+        <file>OneSlot.qml</file>
     </qresource>
     <qresource prefix="/cross"/>
 </RCC>

@@ -10,6 +10,9 @@ class AnaglyphVideo : public QObject
 public:
     explicit AnaglyphVideo(QObject *parent = nullptr);
 
+    Q_INVOKABLE void setShiftLeft(int value) {shiftLeft=value;}
+    Q_INVOKABLE void setAngle(double value) {angle=value;}
+
 signals:
     void newSample(QImage im);
 public slots:
@@ -22,5 +25,7 @@ private:
     bool leftNew=false;
     bool rightNew=false;
     void timeOut();
+    int shiftLeft=0;
+    double angle=0.;
 };
 

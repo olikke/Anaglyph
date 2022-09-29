@@ -35,17 +35,32 @@ void AnaglyphVideo::timeOut()
     RGB[2]=cv::Mat::zeros(right.rows,right.cols,CV_8UC1);
     merge(RGB,3,right1);
 
-    cv::Mat result=cv::Mat(right.rows,right.cols,CV_8UC4);
+    if (shiftLeft>0) {
+        left1=left1(cv::Rect(0,0,left1.cols-shiftLeft,left1.rows));
+        right1=right1(cv::Rect(shiftLeft,0,right1.cols-shiftLeft,right1.rows));
+    }
+
+    if (shiftLeft<0) {
+        left1=left1(cv::Rect(-shiftLeft,0,left1.cols+shiftLeft,left1.rows));
+        right1=right1(cv::Rect(0,0,right1.cols+shiftLeft,right1.rows));
+    }
+
+    if (!qFuzzyIsNull(angle)) {
+        cv::Point center=cv::Point(left1.cols/2,left1.rows/2);
+        cv::Mat rotate=cv::getRotationMatrix2D(center,angle,1.);
+        cv::warpAffine(left1,left1,rotate,cv::Size());
+        rotate=cv::getRotationMatrix2D(center,-angle,1.);
+        cv::warpAffine(right1,right1,rotate,cv::Size());
+    }
+
+
+
+
+
+
+    cv::Mat result=cv::Mat(right1.rows,right1.cols,CV_8UC4);
 
    cv::addWeighted(right1, 1, left1, 1, 0,result);
-
-//   cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
-//   clahe->setClipLimit(2);
-//   cv::split(result,RGB);
-//   clahe->apply(RGB[0],RGB[0]);
-//   clahe->apply(RGB[1],RGB[1]);
-//   clahe->apply(RGB[2],RGB[2]);
-//   merge(RGB,3,result);
 
    cv::cvtColor(result,result,CV_BGR2RGB);
 

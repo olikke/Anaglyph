@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    app.setWindowIcon(QIcon(":/glass.png"));
+    app.setWindowIcon(QIcon(":/icon/glass.png"));
 
     QQmlApplicationEngine * engine=new QQmlApplicationEngine(&app);
     QQmlContext *context = engine->rootContext();
@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     AnaglyphVideo* anaglyphVideo=new AnaglyphVideo(&app);
     QObject::connect(left,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::leftSample);
     QObject::connect(right,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::rightSample);
+    context->setContextProperty("anaglyph",anaglyphVideo);
 
     ImageProvider* provider=new ImageProvider(&app,QSize(1920,1080));
     context->setContextProperty("videoProvider",provider);

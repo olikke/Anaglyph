@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtGraphicalEffects 1.0
 
 Column {
+
     property string _lastfolder: openDialog.shortcuts.home
     spacing: 10
     property var hello
