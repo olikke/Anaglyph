@@ -35,17 +35,17 @@ void ImagePro::start()
 
      cv::Mat result=cv::Mat(right.rows,right.cols,CV_8UC4);
 
-    cv::addWeighted(right1, 0.5, left1, 0.5, 0,result);
+    cv::addWeighted(right1, 1, left1, 1, 0,result);
 
 //    cv::imwrite("/home/olikke/Work/result.bmp",result);
 
-    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
-    clahe->setClipLimit(2);
-    cv::split(result,RGB);
-    clahe->apply(RGB[0],RGB[0]);
-    clahe->apply(RGB[1],RGB[1]);
-    clahe->apply(RGB[2],RGB[2]);
-    merge(RGB,3,result);
+//    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+//    clahe->setClipLimit(2);
+//    cv::split(result,RGB);
+//    clahe->apply(RGB[0],RGB[0]);
+//    clahe->apply(RGB[1],RGB[1]);
+//    clahe->apply(RGB[2],RGB[2]);
+//    merge(RGB,3,result);
 
 //    cv::imwrite("/home/olikke/Work/resultClahe.bmp",result);
     cv::cvtColor(result,result,CV_BGR2RGB);

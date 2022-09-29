@@ -37,31 +37,15 @@ void AnaglyphVideo::timeOut()
 
     cv::Mat result=cv::Mat(right.rows,right.cols,CV_8UC4);
 
-   cv::addWeighted(right1, 0.5, left1, 0.5, 0,result);
+   cv::addWeighted(right1, 1, left1, 1, 0,result);
 
-   cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
-   clahe->setClipLimit(2);
-   cv::split(result,RGB);
-//   QList<cv::Mat> RGB1;
-
-//   RGB1.push_back(RGB[0]);
-//   RGB1.push_back(RGB[1]);
-//   RGB1.push_back(RGB[2]);
-
-//   QList<cv::Mat> RGB2=QtConcurrent::blockingMapped<QList<cv::Mat>>(RGB1,[&clahe](const cv::Mat &RGB){/*cv::Mat RGB1; */clahe->apply(RGB,RGB); return RGB;});
-
-//   QtConcurrent::mappedReduced(RGB1,
-//           [](const QImage &image) {
-//               return image.scaled(size, size);
-//           },
-//           addToCollage
-//      ).results();
-
-
-   clahe->apply(RGB[0],RGB[0]);
-   clahe->apply(RGB[1],RGB[1]);
-   clahe->apply(RGB[2],RGB[2]);
-   merge(RGB,3,result);
+//   cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+//   clahe->setClipLimit(2);
+//   cv::split(result,RGB);
+//   clahe->apply(RGB[0],RGB[0]);
+//   clahe->apply(RGB[1],RGB[1]);
+//   clahe->apply(RGB[2],RGB[2]);
+//   merge(RGB,3,result);
 
    cv::cvtColor(result,result,CV_BGR2RGB);
 

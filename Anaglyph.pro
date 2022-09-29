@@ -26,7 +26,8 @@ SOURCES += \
     imageprovider.cpp \
     main.cpp \
     anaglyphVideo.cpp \
-    grabOpenCV.cpp
+    grabOpenCV.cpp \
+    camfinder.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,7 +46,8 @@ HEADERS += \
     imagepro.h \
     imageprovider.h \
     anaglyphVideo.h \
-    grabOpenCV.h
+    grabOpenCV.h \
+    camfinder.h
 
 unix|win32: LIBS += -lgstreamer-1.0
 

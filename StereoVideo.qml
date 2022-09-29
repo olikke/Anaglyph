@@ -16,18 +16,16 @@ Column {
             id: cb1
             height: 50
             width: (parent.width-parent.spacing*3)/4
-            model: ["0","1","2","3"]
+            model: camFinder.model
             currentIndex: -1
-            onCurrentIndexChanged: leftGrab.start(currentIndex)
         }
 
         ComboBox{
             id: cb2
             height: 50
             width: (parent.width-parent.spacing*3)/4
-            model: ["0","1","2","3"]
+            model: camFinder.model
             currentIndex: -1
-            onCurrentIndexChanged: rightGrab.start(currentIndex)
         }
 
         Button{
@@ -36,6 +34,8 @@ Column {
             width: (parent.width-parent.spacing*3)/4
             height: 50
             onClicked: {
+                leftGrab.start(cb1.currentIndex)
+                rightGrab.start(cb2.currentIndex)
                 timer.start()
             }
         }
@@ -56,10 +56,12 @@ Column {
         onImageChanged: im.reload()
     }
 
+
+
     Image{
         id: im
-        width: 1920/2
-        height: 1080/2
+        width: 1920
+        height: 1080
         cache: false
         smooth: true
         autoTransform: false

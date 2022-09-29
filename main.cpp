@@ -3,10 +3,12 @@
 #include <QQmlContext>
 #include <QObject>
 #include <QTimer>
+#include <QIcon>
 #include "imageprovider.h"
 #include "imagepro.h"
 #include "grabOpenCV.h"
 #include "anaglyphVideo.h"
+#include "camfinder.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,8 +17,13 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    app.setWindowIcon(QIcon(":/glass.png"));
+
     QQmlApplicationEngine * engine=new QQmlApplicationEngine(&app);
     QQmlContext *context = engine->rootContext();
+
+    CamFinder* camFinder=new CamFinder(&app);
+    context->setContextProperty("camFinder",camFinder);
 
     QTimer* timer=new QTimer(&app);
     timer->setInterval(80);

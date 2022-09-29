@@ -4,6 +4,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>StereoPhoto.qml</file>
         <file>StereoVideo.qml</file>
+        <file>glass.png</file>
     </qresource>
     <qresource prefix="/cross"/>
 </RCC>

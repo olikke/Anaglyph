@@ -7,10 +7,10 @@ import "."
 
 Window {
     visible: true
-    width: 1200
-    height: 800
+    width: Screen.width
+    height: Screen.height
     color: primary
-    title: qsTr("Hello World")
+    title: "ANAGLYPH"
 
     Component.onCompleted: {
         Material.theme=Material.Dark
