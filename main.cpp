@@ -29,11 +29,11 @@ int main(int argc, char *argv[])
     timer->setInterval(80);
     context->setContextProperty("timer",timer);
 
-    GrabOpenCV* left=new GrabOpenCV(1,&app);
+    GrabOpenCV* left=new GrabOpenCV(&app);
     context->setContextProperty("leftGrab",left);
     QObject::connect(timer,&QTimer::timeout,left,&GrabOpenCV::execute);
 
-    GrabOpenCV* right=new GrabOpenCV(2,&app);
+    GrabOpenCV* right=new GrabOpenCV(&app);
     context->setContextProperty("rightGrab",right);
     QObject::connect(timer,&QTimer::timeout,right,&GrabOpenCV::execute);
 

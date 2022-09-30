@@ -16,7 +16,7 @@ Column {
         property bool left
         title: "Открыть файл"
         folder: _lastfolder
-        nameFilters: [ "Image files (*.bmp *.jpg *.png)"  ]
+        nameFilters: [ "Image files (*.bmp *.jpg *.png *.jpeg)"  ]
         onAccepted: {
             imagePro.openFile(fileUrl,left)
             _lastfolder=fileUrl

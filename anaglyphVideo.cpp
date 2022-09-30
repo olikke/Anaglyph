@@ -42,26 +42,67 @@ void AnaglyphVideo::timeOut()
     if (verticalShift>0) {
         left1=left1(cv::Rect(0,0,left1.cols,left1.rows-verticalShift));
         right1=right1(cv::Rect(0,verticalShift,right1.cols,right1.rows-verticalShift));
-
+    }
+    if (verticalShift<0) {
+        left1=left1(cv::Rect(0,-verticalShift,left1.cols,left1.rows+verticalShift));
+        right1=right1(cv::Rect(0,0,right1.cols,right1.rows+verticalShift));
+    }
+    if (!qFuzzyIsNull(leftAngle)) {
+        cv::Mat rotate=cv::getRotationMatrix2D(cv::Point(left1.rows/2,left1.cols/2),leftAngle,1.);
+        cv::warpAffine(left1,left1,rotate,cv::Size());
+    }
+    if (!qFuzzyIsNull(rightAngle)) {
+        cv::Mat rotate=cv::getRotationMatrix2D(cv::Point(right1.rows/2,right1.cols/2),rightAngle,1.);
+        cv::warpAffine(right1,right1,rotate,cv::Size());
     }
 
-#ifdef TEST
-    cv::Rect leftRect=cv::Rect(200,200,left1.cols/2-205,left1.rows-400);
-    cv::rectangle(left1,leftRect,cv::Scalar(0, 0, 255),4);
-    cv::rectangle(right1,cv::Point(right1.cols/2+5,200),cv::Point(right1.cols-200,right1.rows-200),cv::Scalar(255, 0255, 0),4);
-#endif
-
-    if (leftIncline>0) {
-            cv::Vector<cv::Point> src;
-            cv::Vector<cv::Point> dst;
-        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.0);
-    }
+//    if (leftIncline>0) {
+//            cv::Vector<cv::Point> src;
+//            cv::Vector<cv::Point> dst;
+//        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.0);
+//    }
 
     cv::Mat result=cv::Mat(right1.rows,right1.cols,CV_8UC4);
 
     cv::addWeighted(right1, 1, left1, 1, 0,result);
 
+#ifdef TEST
+    int kr=400;
+    QRect leftQRect=QRect(kr*2,kr,left1.cols-kr*4,left1.rows-kr*2);
+    cv::vector<cv::Point> vert;
+    vert.push_back(cv::Point(leftQRect.topLeft().x(),leftQRect.topLeft().y()));
+    vert.push_back(cv::Point(leftQRect.topRight().x(),leftQRect.topRight().y()));
+    vert.push_back(cv::Point(leftQRect.bottomRight().x(),leftQRect.bottomRight().y()));
+    vert.push_back(cv::Point(leftQRect.bottomLeft().x(),leftQRect.bottomLeft().y()));
+    cv::polylines(result,vert,true,cv::Scalar(255,0,0));
+
+    QTransform transform=QTransform();
+    transform.translate(0,leftQRect.height());
+    transform.rotate(45,Qt::XAxis);
+ //   transform.translate(0,-leftQRect.height());
+
+    QPolygon leftQPoli=transform.mapToPolygon(leftQRect);
+    vert.clear();
+    vert.push_back(cv::Point(leftQPoli.point(0).x(),leftQPoli.point(0).y()));
+    vert.push_back(cv::Point(leftQPoli.point(1).x(),leftQPoli.point(1).y()));
+    vert.push_back(cv::Point(leftQPoli.point(2).x(),leftQPoli.point(2).y()));
+    vert.push_back(cv::Point(leftQPoli.point(3).x(),leftQPoli.point(3).y()));
+    cv::polylines(result,vert,true,cv::Scalar(255,255,255));
+
+//    transform.rotate(45,Qt::XAxis);
+//    leftQPoli=transform.mapToPolygon(leftQRect);
+//    vert.clear();
+//    vert.push_back(cv::Point(leftQPoli.point(0).x(),leftQPoli.point(0).y()));
+//    vert.push_back(cv::Point(leftQPoli.point(1).x(),leftQPoli.point(1).y()));
+//    vert.push_back(cv::Point(leftQPoli.point(2).x(),leftQPoli.point(2).y()));
+//    vert.push_back(cv::Point(leftQPoli.point(3).x(),leftQPoli.point(3).y()));
+//    cv::polylines(result,vert,true,cv::Scalar(0,255,255));
+
+#endif
+
     cv::cvtColor(result,result,CV_BGR2RGB);
     resultQIM=QImage((uchar*)result.data, result.cols, result.rows, result.step, QImage::Format_RGB888);
     emit newSample(resultQIM);
 }
+
+

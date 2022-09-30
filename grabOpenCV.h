@@ -4,13 +4,15 @@
 #include <QDebug>
 #include <opencv2/opencv.hpp>
 
+
 class GrabOpenCV : public QObject
 {
     Q_OBJECT
 public:
-    GrabOpenCV(int number, QObject *parent = nullptr);
+    explicit GrabOpenCV(QObject *parent = nullptr): QObject(parent) {}
     ~GrabOpenCV();
     Q_INVOKABLE void start(int numb);
+    Q_INVOKABLE void photoName(QString name);
 
 signals:
     void newSample(cv::Mat mat);
@@ -20,6 +22,6 @@ public slots:
 
 private:
     cv::VideoCapture cap;
-    bool test=false;
-    QString testName;
+    bool video=false;
+    cv::Mat frame;
 };

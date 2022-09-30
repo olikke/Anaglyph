@@ -20,6 +20,7 @@ Row{
     property var to
     property var step
     property bool alwaysLocked: false
+    property alias lockedEnable: lock.enabled
 
     property int sp: parent.width-left.width-right.width
 
@@ -96,6 +97,7 @@ Row{
         width: parent.sp
         height: parent.height
         Button{
+            id: lock
              anchors.horizontalCenter: parent.horizontalCenter
              anchors.verticalCenter: parent.verticalCenter
              width: 48

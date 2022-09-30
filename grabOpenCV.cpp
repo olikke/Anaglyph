@@ -1,13 +1,5 @@
 #include "grabOpenCV.h"
 
-
-GrabOpenCV::GrabOpenCV(int number, QObject *parent) : QObject(parent)
-{
-    number==1?
-        testName="/home/olikke/Work/GitWork/Anaglyph/Image/left.bmp":
-        testName="/home/olikke/Work/GitWork/Anaglyph/Image/right.bmp";
-}
-
 GrabOpenCV::~GrabOpenCV()
 {
     cap.release();
@@ -15,27 +7,30 @@ GrabOpenCV::~GrabOpenCV()
 
 void GrabOpenCV::start(int numb)
 {
-    if (numb<0) {
-        test=true;
-        return;
-    }
-    test=false;
+    if (numb<0)  return;
+    video=true;
     cap=cv::VideoCapture(numb);
     cap.set(CV_CAP_PROP_FRAME_WIDTH,1920);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT,1080);
 }
 
-void GrabOpenCV::execute()
+void GrabOpenCV::photoName(QString name)
 {
-    if (test) {
-        cv::Mat fr=cv::imread(testName.toLatin1().constData());
-        if (fr.empty()) return;
-        qDebug()<<"execute";
-        emit newSample(fr);
+    if (name.contains("file:///"))
+    {
+        name.remove(0,7);
+    }
+    frame = cv::imread(name.toLatin1().constData());
+    if (frame.empty())
+    {
+        qDebug()<<"Can't load image "<<name;
         return;
     }
-    cv::Mat frame;
-    cap>>frame;
+}
+
+void GrabOpenCV::execute()
+{
+    if (video) cap>>frame;
     if (frame.empty()) return;
     emit newSample(frame);
 }

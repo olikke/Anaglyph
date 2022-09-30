@@ -3,6 +3,7 @@
 #include <QImage>
 #include <opencv2/opencv.hpp>
 #include <QtConcurrent>
+#include <QTransform>
 
 #define TEST
 
@@ -14,6 +15,11 @@ public:
 
     Q_INVOKABLE void setHorizontShift(int value) {horizontShift=value;}
     Q_INVOKABLE void setVerticalShift(int value) {verticalShift=value;}
+    Q_INVOKABLE void setLeftAngle(double value) {leftAngle=value;}
+    Q_INVOKABLE void setRightAngle(double value) {rightAngle=value;}
+
+
+
     Q_INVOKABLE void setLeftIncline(double value) {leftIncline=value;}
     Q_INVOKABLE void setRightIncline(double value) {rightIncline=value;}
     Q_INVOKABLE void setLeftTurn(double value) {leftTurn=value;}
@@ -33,6 +39,8 @@ private:
     void timeOut();
     int horizontShift=0;
     int verticalShift=0;
+    double leftAngle=0.;
+    double rightAngle=0.;
     double leftIncline=0.;
     double rightIncline=0.;
     double leftTurn=0.;
