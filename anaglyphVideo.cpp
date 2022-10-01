@@ -56,19 +56,63 @@ void AnaglyphVideo::timeOut()
         cv::warpAffine(right1,right1,rotate,cv::Size());
     }
 
-//    if (leftIncline>0) {
-//            cv::Vector<cv::Point> src;
-//            cv::Vector<cv::Point> dst;
-//        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.0);
-//    }
+    if (!qFuzzyIsNull(leftIncline)) {
+        int width=left1.cols;
+        int height=left1.rows;
+        //найдем новые точки
+        QTransform transform=QTransform();
+        transform.translate(width/2,height/2);
+        transform.rotate(leftIncline,Qt::XAxis);
+        transform.translate(-width/2,-height/2);
+        QRect srcRect=QRect(0,0,width,height);
+        QPolygon polygon=transform.mapToPolygon(srcRect);;
+        //а теперь построим
+        std::vector<cv::Point2f> src;
+        src.push_back(cv::Point2f(0,0));
+        src.push_back(cv::Point2f(width,0));
+        src.push_back(cv::Point2f(width,height));
+        src.push_back(cv::Point2f(0,height));
+        std::vector<cv::Point2f> dst;
+        dst.push_back(cv::Point2f(polygon.point(0).x(),polygon.point(0).y()));
+        dst.push_back(cv::Point2f(polygon.point(1).x(),polygon.point(1).y()));
+        dst.push_back(cv::Point2f(polygon.point(2).x(),polygon.point(2).y()));
+        dst.push_back(cv::Point2f(polygon.point(3).x(),polygon.point(3).y()));
+        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.);
+        cv::warpPerspective(left1,left1,homo,cv::Size());
+    }
+
+    if (!qFuzzyIsNull(rightIncline)) {
+        int width=right1.cols;
+        int height=right1.rows;
+        //найдем новые точки
+        QTransform transform=QTransform();
+        transform.translate(width/2,height/2);
+        transform.rotate(rightIncline,Qt::XAxis);
+        transform.translate(-width/2,-height/2);
+        QRect srcRect=QRect(0,0,width,height);
+        QPolygon polygon=transform.mapToPolygon(srcRect);;
+        //а теперь построим
+        std::vector<cv::Point2f> src;
+        src.push_back(cv::Point2f(0,0));
+        src.push_back(cv::Point2f(width,0));
+        src.push_back(cv::Point2f(width,height));
+        src.push_back(cv::Point2f(0,height));
+        std::vector<cv::Point2f> dst;
+        dst.push_back(cv::Point2f(polygon.point(0).x(),polygon.point(0).y()));
+        dst.push_back(cv::Point2f(polygon.point(1).x(),polygon.point(1).y()));
+        dst.push_back(cv::Point2f(polygon.point(2).x(),polygon.point(2).y()));
+        dst.push_back(cv::Point2f(polygon.point(3).x(),polygon.point(3).y()));
+        cv::Mat homo=cv::findHomography(src,dst,CV_RANSAC,5.);
+        cv::warpPerspective(right1,right1,homo,cv::Size());
+    }
+
 
     cv::Mat result=cv::Mat(right1.rows,right1.cols,CV_8UC4);
 
     cv::addWeighted(right1, 1, left1, 1, 0,result);
 
 #ifdef TEST
-    int kr=400;
-    QRect leftQRect=QRect(kr*2,kr,left1.cols-kr*4,left1.rows-kr*2);
+    QRect leftQRect=QRect(400,400,400,300);
     cv::vector<cv::Point> vert;
     vert.push_back(cv::Point(leftQRect.topLeft().x(),leftQRect.topLeft().y()));
     vert.push_back(cv::Point(leftQRect.topRight().x(),leftQRect.topRight().y()));
@@ -77,9 +121,9 @@ void AnaglyphVideo::timeOut()
     cv::polylines(result,vert,true,cv::Scalar(255,0,0));
 
     QTransform transform=QTransform();
-    transform.translate(0,leftQRect.height());
+    transform.translate(leftQRect.left()+leftQRect.width()/2,leftQRect.top()+leftQRect.height()/2);
     transform.rotate(45,Qt::XAxis);
- //   transform.translate(0,-leftQRect.height());
+    transform.translate(-(leftQRect.left()+leftQRect.width()/2),-(leftQRect.top()+leftQRect.height()/2));
 
     QPolygon leftQPoli=transform.mapToPolygon(leftQRect);
     vert.clear();
@@ -88,16 +132,6 @@ void AnaglyphVideo::timeOut()
     vert.push_back(cv::Point(leftQPoli.point(2).x(),leftQPoli.point(2).y()));
     vert.push_back(cv::Point(leftQPoli.point(3).x(),leftQPoli.point(3).y()));
     cv::polylines(result,vert,true,cv::Scalar(255,255,255));
-
-//    transform.rotate(45,Qt::XAxis);
-//    leftQPoli=transform.mapToPolygon(leftQRect);
-//    vert.clear();
-//    vert.push_back(cv::Point(leftQPoli.point(0).x(),leftQPoli.point(0).y()));
-//    vert.push_back(cv::Point(leftQPoli.point(1).x(),leftQPoli.point(1).y()));
-//    vert.push_back(cv::Point(leftQPoli.point(2).x(),leftQPoli.point(2).y()));
-//    vert.push_back(cv::Point(leftQPoli.point(3).x(),leftQPoli.point(3).y()));
-//    cv::polylines(result,vert,true,cv::Scalar(0,255,255));
-
 #endif
 
     cv::cvtColor(result,result,CV_BGR2RGB);

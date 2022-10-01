@@ -169,17 +169,21 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot{
+            OneSlot2{
                 id: shift
-                source1: "qrc:/icon/frame_shiftH.png"
-                source2: "qrc:/icon/frame_shiftV.png"
-                rotation1: 0
-                rotation2: 180
                 from: -200
                 to: 200
                 step: 1
-                onLeftSignal: anaglyph.setHorizontShift(value)
-                onRightSignal: anaglyph.setVerticalShift(value)
+                leftImage: HorizontalShift{id: horizontalShift}
+                rightImage: VerticalShift{id: verticalShift}
+                onLeftSignal: {
+                    anaglyph.setHorizontShift(value)
+                    horizontalShift.fshift=value/200;
+                }
+                onRightSignal: {
+                    anaglyph.setVerticalShift(value)
+                    verticalShift.fshift=value/200;
+                }
                 lockedEnable: false
             }
 
@@ -199,17 +203,21 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot{
+            OneSlot2{
                 id: angle
-                source1: "qrc:/icon/frame.png"
-                rotation1: 15
-                source2: "qrc:/icon/frame.png"
-                rotation2: -15
                 from: -45
                 to: 45
                 step: 0.1
-                onLeftSignal: anaglyph.setLeftAngle(value*step)
-                onRightSignal: anaglyph.setRightAngle(value*step)
+                leftImage: Angle{id: leftAngle; color: red}
+                rightImage: Angle{id: rightAngle; color: blue}
+                onLeftSignal: {
+                    anaglyph.setLeftAngle(value*step)
+                    leftImage.value=-value*step
+                }
+                onRightSignal: {
+                    anaglyph.setRightAngle(value*step)
+                    rightAngle.value=-value*step
+                }
             }
 
             Rectangle{
@@ -220,7 +228,7 @@ Row {
             }
 
             Text {
-                text: "Наклон 1"
+                text: "Наклон туда"
                 width: 20
                 font.pixelSize: 14
                 color: foreground
@@ -228,17 +236,21 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot{
+            OneSlot2{
                 id: vertivalRotation
-                source1: "qrc:/icon/frame_angleV.png"
-                rotation1: 0
-                source2: "qrc:/icon/frame_angleV.png"
-                rotation2: 0
                 from: -10
                 to: 10
                 step: 0.1
-                onLeftSignal: anaglyph.setLeftIncline(value/step)
-                onRightSignal: anaglyph.setRightIncline(value/step)
+                leftImage: TRotation{id: leftRotation; color: red}
+                rightImage: TRotation{id: rightRotation; color: blue}
+                onLeftSignal: {
+                    anaglyph.setLeftIncline(value/step)
+                    leftRotation.value=value*step*7
+                }
+                onRightSignal: {
+                    anaglyph.setRightIncline(value/step)
+                    rightRotation.value=value*step*7
+                }
             }
 
             Rectangle{
@@ -249,7 +261,7 @@ Row {
             }
 
             Text {
-                text: "Наклон 2"
+                text: "Наклон сюда"
                 width: 20
                 font.pixelSize: 14
                 color: foreground
@@ -257,28 +269,22 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot{
+            OneSlot2{
                 id: horizontalRotation
-                source1:  "qrc:/icon/frame_angleV.png"
-                source2:  "qrc:/icon/frame_angleV.png"
-                rotation1: 90
-                rotation2: 270
                 from: -10
                 to: 10
                 step: 0.1
-                onLeftSignal: anaglyph.setLeftTurn(value/step)
-                onRightSignal: anaglyph.setRightTurn(value/step)
+                leftImage: TRotation{id: leftHRotation; color: red; isVertical:false}
+                rightImage: TRotation{id: rightHRotation; color: blue; isVertical:false}
+                onLeftSignal: {
+                    leftHRotation.value=value*step*7
+                    anaglyph.setLeftTurn(value/step)
+                }
+                onRightSignal: {
+                    rightHRotation.value=value*step*7
+                    anaglyph.setRightTurn(value/step)
+                }
             }
-        }
-
-
-        Rectangle {
-            width:300
-            height: 200
-            color:"transparent"
-            border.color: "red"
-            transform: Rotation { origin.x: 150; origin.y: 100; axis { x: 1; y: 0; z: 0 } angle: 45 }
-
         }
     }
 

@@ -11,7 +11,11 @@
         <file>icon/frame_angleV.png</file>
         <file>icon/lock.png</file>
         <file>icon/unlock.png</file>
-        <file>OneSlot.qml</file>
+        <file>OneSlot2.qml</file>
+        <file>HorizontalShift.qml</file>
+        <file>VerticalShift.qml</file>
+        <file>Angle.qml</file>
+        <file>TRotation.qml</file>
     </qresource>
     <qresource prefix="/cross"/>
 </RCC>

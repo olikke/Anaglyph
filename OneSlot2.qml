@@ -12,10 +12,8 @@ Row{
     signal leftSignal(int value)
     signal rightSignal(int value)
 
-    property alias source1: im1.source
-    property alias source2: im2.source
-    property alias rotation1: co1.rotation
-    property alias rotation2: co2.rotation
+    property var leftImage
+    property var rightImage
     property var from
     property var to
     property var step
@@ -25,6 +23,11 @@ Row{
     property int sp: parent.width-left.width-right.width
 
     property bool locked: alwaysLocked? true : false
+
+    Component.onCompleted: {
+        leftImage.parent=image1
+        rightImage.parent=image2
+    }
 
     Item{
         id: left
@@ -39,25 +42,9 @@ Row{
             spacing: 5
 
             Item{
+                id: image1
                 width: 64
                 height: parent.height-txt1.height*2
-
-                Image{
-                    visible: false
-                    id: im1
-                    width: 64
-                    height: 64
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 10
-                }
-
-                ColorOverlay{
-                    id: co1
-                    anchors.fill: im1
-                    source:im1
-                    color:foreground
-                    opacity: 0.5
-                }
             }
 
             Text{
@@ -96,16 +83,27 @@ Row{
     Item{
         width: parent.sp
         height: parent.height
-        Button{
-            id: lock
-             anchors.horizontalCenter: parent.horizontalCenter
-             anchors.verticalCenter: parent.verticalCenter
-             width: 48
-             height: 48
-             icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
-             onClicked: locked=!locked
-             enabled: !root.alwaysLocked
-         }
+        Column{
+            width: 64
+            height: implicitHeight
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing:5
+            Button{
+                id: lock
+                width: 64
+                height: 48
+                icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
+                onClicked: locked=!locked
+                enabled: !root.alwaysLocked
+            }
+
+            Button{
+                width: 64
+                height: 48
+                text: "zero"
+                onClicked: sl1.value=sl2.value=0
+            }
+        }
     }
 
     Item{
@@ -120,25 +118,9 @@ Row{
             anchors.right: parent.right
 
             Item{
+                id: image2
                 width: 64
                 height: parent.height-txt2.height*2
-
-                Image{
-                    visible: false
-                    id: im2
-                    width: 64
-                    height: 64
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 10
-                }
-
-                ColorOverlay{
-                    id: co2
-                    anchors.fill: im2
-                    source:im2
-                    color:foreground
-                    opacity: 0.5
-                }
             }
 
             Text{

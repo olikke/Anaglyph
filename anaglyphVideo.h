@@ -5,7 +5,7 @@
 #include <QtConcurrent>
 #include <QTransform>
 
-#define TEST
+//#define TEST
 
 class AnaglyphVideo : public QObject
 {
@@ -20,8 +20,8 @@ public:
 
 
 
-    Q_INVOKABLE void setLeftIncline(double value) {leftIncline=value;}
-    Q_INVOKABLE void setRightIncline(double value) {rightIncline=value;}
+    Q_INVOKABLE void setLeftIncline(double value) {leftIncline=value/10;}
+    Q_INVOKABLE void setRightIncline(double value) {rightIncline=value/10;}
     Q_INVOKABLE void setLeftTurn(double value) {leftTurn=value;}
     Q_INVOKABLE void setRightTurn(double value) {rightTurn=value;}
 
