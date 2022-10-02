@@ -5,7 +5,7 @@
 #include <QtConcurrent>
 #include <QTransform>
 
-//#define TEST
+const double PRECISION=0.1;
 
 class AnaglyphVideo : public QObject
 {
@@ -13,17 +13,16 @@ class AnaglyphVideo : public QObject
 public:
     explicit AnaglyphVideo(QObject *parent = nullptr): QObject(parent) {}
 
+    Q_INVOKABLE double getPrecision() {return PRECISION;}
+
     Q_INVOKABLE void setHorizontShift(int value) {horizontShift=value;}
     Q_INVOKABLE void setVerticalShift(int value) {verticalShift=value;}
-    Q_INVOKABLE void setLeftAngle(double value) {leftAngle=value;}
-    Q_INVOKABLE void setRightAngle(double value) {rightAngle=value;}
-
-
-
-    Q_INVOKABLE void setLeftIncline(double value) {leftIncline=value/10;}
-    Q_INVOKABLE void setRightIncline(double value) {rightIncline=value/10;}
-    Q_INVOKABLE void setLeftTurn(double value) {leftTurn=value;}
-    Q_INVOKABLE void setRightTurn(double value) {rightTurn=value;}
+    Q_INVOKABLE void setLeftAngle(int value) {leftAngle=value*PRECISION;}
+    Q_INVOKABLE void setRightAngle(int value) {rightAngle=value*PRECISION;}
+    Q_INVOKABLE void setLeftIncline(int value) {leftIncline=value*PRECISION;}
+    Q_INVOKABLE void setRightIncline(int value) {rightIncline=value*PRECISION;}
+    Q_INVOKABLE void setLeftTurn(int value) {leftTurn=value*PRECISION;}
+    Q_INVOKABLE void setRightTurn(int value) {rightTurn=value*PRECISION;}
 
 signals:
     void newSample(QImage im);
@@ -45,6 +44,6 @@ private:
     double rightIncline=0.;
     double leftTurn=0.;
     double rightTurn=0.;
-    cv::Rect calcIncline(const cv::Rect &before);
+    void calcTransform(cv::Mat &image,double angle,Qt::Axis axis);
 };
 

@@ -52,7 +52,7 @@ Row {
             Button{
                 id: start
                 text: "Старт"
-                width: parent.width/2-5
+                width: (parent.width-parent.spacing*2)/3
                 height: 40
                 onClicked: {
                     leftGrab.start(cb1.currentIndex)
@@ -64,10 +64,19 @@ Row {
             Button{
                 id: stop
                 text: "Стоп"
-                width: parent.width/2-5
+                width: (parent.width-parent.spacing*2)/3
                 height: 40
                 onClicked: {
                     timer.stop()
+                }
+            }
+
+            Button{
+                text: "Запись"
+                width: (parent.width-parent.spacing*2)/3
+                height: 40
+                onClicked: {
+                   сonsole.log("начать запись")
                 }
             }
         }
@@ -124,7 +133,6 @@ Row {
             spacing: 10
 
             Button{
-                id: start1
                 text: "Старт"
                 width: parent.width/2-5
                 height: 40
@@ -136,7 +144,6 @@ Row {
             }
 
             Button{
-                id: stop1
                 text: "Стоп"
                 width: parent.width/2-5
                 height: 40
@@ -145,8 +152,6 @@ Row {
                 }
             }
         }
-
-
 
         Rectangle{
             width: parent.width
@@ -169,7 +174,7 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot2{
+            OneSlot{
                 id: shift
                 from: -200
                 to: 200
@@ -203,20 +208,20 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot2{
+            OneSlot{
                 id: angle
                 from: -45
                 to: 45
-                step: 0.1
+                step: anaglyph.getPrecision()
                 leftImage: Angle{id: leftAngle; color: red}
                 rightImage: Angle{id: rightAngle; color: blue}
                 onLeftSignal: {
-                    anaglyph.setLeftAngle(value*step)
-                    leftImage.value=-value*step
+                    anaglyph.setLeftAngle(value)
+                    leftImage.value=value*step
                 }
                 onRightSignal: {
-                    anaglyph.setRightAngle(value*step)
-                    rightAngle.value=-value*step
+                    anaglyph.setRightAngle(value)
+                    rightAngle.value=value*step
                 }
             }
 
@@ -236,19 +241,19 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot2{
+            OneSlot{
                 id: vertivalRotation
                 from: -10
                 to: 10
-                step: 0.1
+                step: anaglyph.getPrecision()
                 leftImage: TRotation{id: leftRotation; color: red}
                 rightImage: TRotation{id: rightRotation; color: blue}
                 onLeftSignal: {
-                    anaglyph.setLeftIncline(value/step)
+                    anaglyph.setLeftIncline(value)
                     leftRotation.value=value*step*7
                 }
                 onRightSignal: {
-                    anaglyph.setRightIncline(value/step)
+                    anaglyph.setRightIncline(value)
                     rightRotation.value=value*step*7
                 }
             }
@@ -269,20 +274,20 @@ Row {
                 font.capitalization: Font.AllUppercase
             }
 
-            OneSlot2{
+            OneSlot{
                 id: horizontalRotation
                 from: -10
                 to: 10
-                step: 0.1
+                step: anaglyph.getPrecision()
                 leftImage: TRotation{id: leftHRotation; color: red; isVertical:false}
                 rightImage: TRotation{id: rightHRotation; color: blue; isVertical:false}
                 onLeftSignal: {
                     leftHRotation.value=value*step*7
-                    anaglyph.setLeftTurn(value/step)
+                    anaglyph.setLeftTurn(value)
                 }
                 onRightSignal: {
                     rightHRotation.value=value*step*7
-                    anaglyph.setRightTurn(value/step)
+                    anaglyph.setRightTurn(value)
                 }
             }
         }
@@ -313,6 +318,22 @@ Row {
                 source= ""
                 source = "image://mlive/image"
             }
+        }
+
+        Image{
+            id: im2
+            anchors.fill: im
+            cache: false
+            smooth: true
+            autoTransform: false
+            fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            MouseArea{
+                anchors.fill: im2
+
+            }
+
         }
     }
 

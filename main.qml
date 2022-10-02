@@ -49,8 +49,5 @@ Window {
 
         }
 
-        StereoPhoto{
-
-        }
     }
 }
