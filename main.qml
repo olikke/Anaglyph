@@ -22,6 +22,8 @@ Window {
     property string primary: "#474747"
     property string accent: "#039be5"
     property string foreground: "#f7f7f7"
+    property string red: "#c2185b"
+    property string blue: "#1976d2"
     property int oneHeight: 40
     property int devNumb: 0
     property string _lastfolder: openDialog.shortcuts.home
@@ -47,8 +49,5 @@ Window {
 
         }
 
-        StereoPhoto{
-
-        }
     }
 }

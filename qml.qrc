@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>StereoPhoto.qml</file>
         <file>icon/glass.png</file>
         <file>icon/frame.png</file>
         <file>StereoVideo.qml</file>
@@ -12,6 +11,13 @@
         <file>icon/lock.png</file>
         <file>icon/unlock.png</file>
         <file>OneSlot.qml</file>
+        <file>HorizontalShift.qml</file>
+        <file>VerticalShift.qml</file>
+        <file>Angle.qml</file>
+        <file>TRotation.qml</file>
+        <file>ImageDraw.qml</file>
+        <file>ImageDraw2.qml</file>
+        <file>SomeRec.qml</file>
     </qresource>
     <qresource prefix="/cross"/>
 </RCC>

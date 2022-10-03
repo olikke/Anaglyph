@@ -52,7 +52,7 @@ Row {
             Button{
                 id: start
                 text: "Старт"
-                width: parent.width/2-5
+                width: (parent.width-parent.spacing*2)/3
                 height: 40
                 onClicked: {
                     leftGrab.start(cb1.currentIndex)
@@ -64,10 +64,19 @@ Row {
             Button{
                 id: stop
                 text: "Стоп"
-                width: parent.width/2-5
+                width: (parent.width-parent.spacing*2)/3
                 height: 40
                 onClicked: {
                     timer.stop()
+                }
+            }
+
+            Button{
+                text: "Запись"
+                width: (parent.width-parent.spacing*2)/3
+                height: 40
+                onClicked: {
+                   сonsole.log("начать запись")
                 }
             }
         }
@@ -124,7 +133,6 @@ Row {
             spacing: 10
 
             Button{
-                id: start1
                 text: "Старт"
                 width: parent.width/2-5
                 height: 40
@@ -136,7 +144,6 @@ Row {
             }
 
             Button{
-                id: stop1
                 text: "Стоп"
                 width: parent.width/2-5
                 height: 40
@@ -145,8 +152,6 @@ Row {
                 }
             }
         }
-
-
 
         Rectangle{
             width: parent.width
@@ -171,15 +176,19 @@ Row {
 
             OneSlot{
                 id: shift
-                source1: "qrc:/icon/frame_shiftH.png"
-                source2: "qrc:/icon/frame_shiftV.png"
-                rotation1: 0
-                rotation2: 180
                 from: -200
                 to: 200
                 step: 1
-                onLeftSignal: anaglyph.setHorizontShift(value)
-                onRightSignal: anaglyph.setVerticalShift(value)
+                leftImage: HorizontalShift{id: horizontalShift}
+                rightImage: VerticalShift{id: verticalShift}
+                onLeftSignal: {
+                    anaglyph.setHorizontShift(value)
+                    horizontalShift.fshift=value/200;
+                }
+                onRightSignal: {
+                    anaglyph.setVerticalShift(value)
+                    verticalShift.fshift=value/200;
+                }
                 lockedEnable: false
             }
 
@@ -201,15 +210,19 @@ Row {
 
             OneSlot{
                 id: angle
-                source1: "qrc:/icon/frame.png"
-                rotation1: 15
-                source2: "qrc:/icon/frame.png"
-                rotation2: -15
                 from: -45
                 to: 45
-                step: 0.1
-                onLeftSignal: anaglyph.setLeftAngle(value*step)
-                onRightSignal: anaglyph.setRightAngle(value*step)
+                step: anaglyph.getPrecision()
+                leftImage: Angle{id: leftAngle; color: red}
+                rightImage: Angle{id: rightAngle; color: blue}
+                onLeftSignal: {
+                    anaglyph.setLeftAngle(value)
+                    leftImage.value=value*step
+                }
+                onRightSignal: {
+                    anaglyph.setRightAngle(value)
+                    rightAngle.value=value*step
+                }
             }
 
             Rectangle{
@@ -220,7 +233,7 @@ Row {
             }
 
             Text {
-                text: "Наклон 1"
+                text: "Наклон туда"
                 width: 20
                 font.pixelSize: 14
                 color: foreground
@@ -230,15 +243,19 @@ Row {
 
             OneSlot{
                 id: vertivalRotation
-                source1: "qrc:/icon/frame_angleV.png"
-                rotation1: 0
-                source2: "qrc:/icon/frame_angleV.png"
-                rotation2: 0
                 from: -10
                 to: 10
-                step: 0.1
-                onLeftSignal: anaglyph.setLeftIncline(value/step)
-                onRightSignal: anaglyph.setRightIncline(value/step)
+                step: anaglyph.getPrecision()
+                leftImage: TRotation{id: leftRotation; color: red}
+                rightImage: TRotation{id: rightRotation; color: blue}
+                onLeftSignal: {
+                    anaglyph.setLeftIncline(value)
+                    leftRotation.value=value*step*7
+                }
+                onRightSignal: {
+                    anaglyph.setRightIncline(value)
+                    rightRotation.value=value*step*7
+                }
             }
 
             Rectangle{
@@ -249,7 +266,7 @@ Row {
             }
 
             Text {
-                text: "Наклон 2"
+                text: "Наклон сюда"
                 width: 20
                 font.pixelSize: 14
                 color: foreground
@@ -259,26 +276,20 @@ Row {
 
             OneSlot{
                 id: horizontalRotation
-                source1:  "qrc:/icon/frame_angleV.png"
-                source2:  "qrc:/icon/frame_angleV.png"
-                rotation1: 90
-                rotation2: 270
                 from: -10
                 to: 10
-                step: 0.1
-                onLeftSignal: anaglyph.setLeftTurn(value/step)
-                onRightSignal: anaglyph.setRightTurn(value/step)
+                step: anaglyph.getPrecision()
+                leftImage: TRotation{id: leftHRotation; color: red; isVertical:false}
+                rightImage: TRotation{id: rightHRotation; color: blue; isVertical:false}
+                onLeftSignal: {
+                    leftHRotation.value=value*step*7
+                    anaglyph.setLeftTurn(value)
+                }
+                onRightSignal: {
+                    rightHRotation.value=value*step*7
+                    anaglyph.setRightTurn(value)
+                }
             }
-        }
-
-
-        Rectangle {
-            width:300
-            height: 200
-            color:"transparent"
-            border.color: "red"
-            transform: Rotation { origin.x: 150; origin.y: 100; axis { x: 1; y: 0; z: 0 } angle: 45 }
-
         }
     }
 
@@ -286,28 +297,7 @@ Row {
         width: (parent.width-control.width-parent.spacing)
         height: parent.height
 
-        Connections{
-            target: videoProvider
-            onImageChanged: im.reload()
-        }
+        ImageDraw2{}
 
-        Image{
-            id: im
-            property bool byVertical: parent.width/1920>parent.height/1080
-            width:   byVertical?  1920/1080*parent.height  :  parent.width
-            height: byVertical? 1080/1920*parent.width : parent.height
-            cache: false
-            smooth: true
-            autoTransform: false
-            fillMode: Image.PreserveAspectFit
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            source: "image://mlive/image"
-            function reload() {
-                source= ""
-                source = "image://mlive/image"
-            }
-        }
     }
-
 }
