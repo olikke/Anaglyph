@@ -297,44 +297,7 @@ Row {
         width: (parent.width-control.width-parent.spacing)
         height: parent.height
 
-        Connections{
-            target: videoProvider
-            onImageChanged: im.reload()
-        }
+        ImageDraw2{}
 
-        Image{
-            id: im
-            property bool byVertical: parent.width/1920>parent.height/1080
-            width:   byVertical?  1920/1080*parent.height  :  parent.width
-            height: byVertical? 1080/1920*parent.width : parent.height
-            cache: false
-            smooth: true
-            autoTransform: false
-            fillMode: Image.PreserveAspectFit
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            source: "image://mlive/image"
-            function reload() {
-                source= ""
-                source = "image://mlive/image"
-            }
-        }
-
-        Image{
-            id: im2
-            anchors.fill: im
-            cache: false
-            smooth: true
-            autoTransform: false
-            fillMode: Image.PreserveAspectFit
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            MouseArea{
-                anchors.fill: im2
-
-            }
-
-        }
     }
-
 }
