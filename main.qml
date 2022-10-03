@@ -43,7 +43,7 @@ Window {
     SwipeView{
         currentIndex: 0
         anchors.fill: parent
-        anchors.margins: 10
+     //   anchors.margins: 10
 
         StereoVideo{
 

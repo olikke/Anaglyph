@@ -3,6 +3,21 @@ import QtQuick 2.9
 Item {
     anchors.fill: parent
 
+    property bool redactorEnable: false
+    onRedactorEnableChanged: {
+        if (im.obj===undefined) return
+        for (var i=0; i<im.obj.length; i++)
+            im.obj[i].visible=redactorEnable
+    }
+
+    function clear() {
+        if (im.obj===undefined) return
+        for (var i=0; i<im.obj.length; i++)
+            im.obj[i].destroy()
+        im.obj.clear()
+        if (redactorEnable) myCanvas.requestPaint()
+    }
+
     Connections{
         target: videoProvider
         onImageChanged: im.reload()
@@ -25,62 +40,71 @@ Item {
             source = "image://mlive/image"
         }
 
+        property variant obj: []
+        property var currentObj:undefined
+        property real radius:3
 
-        property int xpos1
-        property int ypos1
-        property int xpos2
-        property int ypos2
-        property var obj1
+        function somebodyIn(id) {
+            for (var i=0; i< obj.length; i++)
+                if (obj[i].id===id)
+                    currentObj=obj[i]
+        }
 
+        Canvas {
+            visible: redactorEnable
+            id: myCanvas
+            anchors.fill: parent
 
-        property var obj2
-
+            onPaint: {
+                var ctx = getContext('2d')
+                ctx.reset()
+                if (im.obj===undefined) return
+                context.lineWidth = 2
+                context.strokeStyle = accent
+                ctx.beginPath()
+                ctx.fillStyle = accent
+                for (var i=0; i< im.obj.length-1; i++) {
+                    ctx.moveTo(im.obj[i].centerX,im.obj[i].centerY)
+                    ctx.lineTo(im.obj[i+1].centerX,im.obj[i+1].centerY)
+                }
+                ctx.stroke()
+            }
+        }
 
         MouseArea{
             anchors.fill: parent
             onPressed: {
-                console.log("hello")
-                parent.xpos1 = mouseX
-                parent.ypos1 = mouseY
-                parent.obj1=createNew(mouseX,mouseY)
-//                Connections{
-//                    target: obj1
-//                    onimhere: console.log("lklklk")
-//                }
+                if (im.currentObj!==undefined) return
+                im.obj.push(createNew(mouseX,mouseY,Date.now()))
+                myCanvas.requestPaint()
             }
             onReleased: {
-                parent.xpos2 = mouseX
-                parent.ypos2 = mouseY
-                parent.obj2=createNew(mouseX,mouseY)
+              if (im.currentObj!==undefined) {
+                      im.currentObj.mouseEnabled=true
+                    im.currentObj=undefined
+              }
+              myCanvas.requestPaint()
             }
 
-//            onMouseXChanged: {
-//                xpos2 = mouseX
-//                ypos2 = mouseY
-//              //  myCanvas.requestPaint()
-//            }
-//            onMouseYChanged: {
-//                myCanvas.xpos2 = mouseX
-//                myCanvas.ypos2 = mouseY
-//                myCanvas.requestPaint()
-//            }
-
-            Loader{
-                id: pointloader
+            onMouseXChanged: {
+                if (im.currentObj!==undefined) {
+                    im.currentObj.x=mouseX-im.radius
+                    im.currentObj.y=mouseY-im.radius
+                }
+            }
+            onMouseYChanged: {
+                if (parent.currentObj!==undefined) {
+                    parent.currentObj.x=mouseX-parent.radius
+                    parent.currentObj.y=mouseY-parent.radius
+                }
             }
 
-            function createNew(xp, yp) {
-                var newObject = Qt.createQmlObject('SomeRec {}', parent);
-                newObject.x = xp-2
-                newObject.y = yp-2
+            function createNew(xp, yp,idd) {
+                var component=Qt.createComponent("SomeRec.qml")
+                var newObject=component.createObject(parent,{x:xp-5, y: yp-5, id:idd, radius: parent.radius,visible: redactorEnable})
+                newObject.imIn.connect(parent.somebodyIn)
                 return newObject
-
-            }
-
-            function deleteOne() {
-                Qt.del
             }
         }
-
     }
 }
