@@ -5,7 +5,7 @@
 #include <QtConcurrent>
 #include <QTransform>
 
-#define TEST
+//#define TEST
 
 class AnaglyphVideo : public QObject
 {
