@@ -330,17 +330,37 @@ Row {
                     height: 40
                     onClicked: imDraw.clear()
                 }
-
-
             }
+        }
 
+        Connections{
+            target: videoProvider
+            onImageChanged: im.reload()
         }
 
         Item{
             width: parent.width
-            height: parent.height-parent.spacing-buttons.height
-            ImageDraw2{
-                id: imDraw
+            height: parent.height-buttons.height
+            Image{
+                id: im
+                property bool byVertical: parent.width/1920>parent.height/1080
+                width:   byVertical?  1920/1080*parent.height  :  parent.width
+                height: byVertical? 1080/1920*parent.width : parent.height
+                cache: false
+                smooth: true
+                autoTransform: false
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image://mlive/image"
+                function reload() {
+                    source= ""
+                    source = "image://mlive/image"
+                }
+
+                ImageDraw{
+                    id: imDraw
+                }
             }
         }
     }
