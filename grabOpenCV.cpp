@@ -2,16 +2,17 @@
 
 GrabOpenCV::~GrabOpenCV()
 {
-    cap.release();
+   stop();
 }
 
 void GrabOpenCV::start(int numb)
 {
     if (numb<0)  return;
     video=true;
-    cap=cv::VideoCapture(numb);
-    cap.set(CV_CAP_PROP_FRAME_WIDTH,1920);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT,1080);
+    stop();
+    cap=new cv::VideoCapture(numb);
+    cap->set(CV_CAP_PROP_FRAME_WIDTH,1920);
+    cap->set(CV_CAP_PROP_FRAME_HEIGHT,1080);
 }
 
 void GrabOpenCV::photoName(QString name)
@@ -28,9 +29,17 @@ void GrabOpenCV::photoName(QString name)
     }
 }
 
+void GrabOpenCV::stop()
+{
+    if (cap) {
+        cap->release();
+        cap=nullptr;
+    }
+}
+
 void GrabOpenCV::execute()
 {
-    if (video) cap>>frame;
+    if (video) *cap>>frame;
     if (frame.empty()) return;
     emit newSample(frame);
 }

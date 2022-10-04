@@ -16,6 +16,24 @@ void AnaglyphVideo::rightSample(cv::Mat im)
 
 void AnaglyphVideo::timeOut()
 {
+    if (onlyOne) {
+        if (isLeft & leftNew) {
+            cv::cvtColor(left,left,CV_BGR2RGB);
+            resultQIM=QImage((uchar*)left.data, left.cols, left.rows, left.step, QImage::Format_RGB888);
+            emit newSample(resultQIM);
+            leftNew=false;
+            return;
+        }
+        if (!isLeft & rightNew) {
+            cv::cvtColor(right,right,CV_BGR2RGB);
+            resultQIM=QImage((uchar*)right.data, right.cols, right.rows, right.step, QImage::Format_RGB888);
+            emit newSample(resultQIM);
+            rightNew=false;
+            return;
+        }
+        return;
+    }
+
     if (!leftNew | !rightNew) return;
     leftNew=false;
     rightNew=false;

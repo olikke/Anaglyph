@@ -57,12 +57,13 @@ Row {
 
                 Button{
                     id: start
-                    text: "Старт"
+                    text: "Стерео"
                     width: (parent.width-parent.spacing*2)/3
                     height: 40
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
                         rightGrab.start(cb2.currentIndex)
+                        anaglyph.setBoth()
                         timer.start()
                     }
                 }
@@ -74,6 +75,8 @@ Row {
                     height: 40
                     onClicked: {
                         timer.stop()
+                        leftGrab.stop()
+                        rightGrab.stop();
                     }
                 }
 
@@ -206,7 +209,7 @@ Row {
                 }
 
                 Text {
-                    text: "Поворот"
+                    text: "Поворот не туда"
                     width: 20
                     font.pixelSize: 14
                     color: foreground
@@ -297,6 +300,52 @@ Row {
                     }
                 }
             }
+
+            Rectangle{
+                width: parent.width
+                height: 3
+                color: foreground
+                opacity: 0.5
+            }
+
+            Text {
+                text: "Фокусировка"
+                width: 20
+                font.pixelSize: 14
+                color: foreground
+                font.family: "Sans Serif"
+                font.capitalization: Font.AllUppercase
+            }
+
+            Row{
+                width: parent.width
+                height: implicitHeight
+                spacing: 10
+
+                Button{
+                    text: "Левая"
+                    width: parent.width/2-5
+                    height: 40
+                    onClicked: {
+                        leftGrab.start(cb1.currentIndex)
+                        anaglyph.setOnlyOne(true,true)
+                        timer.start()
+                    }
+                }
+
+
+                Button{
+                    text: "Правая"
+                    width: parent.width/2-5
+                    height: 40
+                    onClicked: {
+                        rightGrab.start(cb2.currentIndex)
+                        anaglyph.setOnlyOne(true,false)
+                        timer.start()
+                    }
+                }
+            }
+
         }
     }
 

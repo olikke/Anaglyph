@@ -24,6 +24,9 @@ public:
     Q_INVOKABLE void setLeftTurn(int value) {leftTurn=value*PRECISION;}
     Q_INVOKABLE void setRightTurn(int value) {rightTurn=value*PRECISION;}
 
+    Q_INVOKABLE void setOnlyOne(bool vOnlyOne, bool vLeft) {onlyOne=vOnlyOne; isLeft=vLeft;}
+    Q_INVOKABLE void setBoth() {onlyOne=false;}
+
 signals:
     void newSample(QImage im);
 public slots:
@@ -45,5 +48,7 @@ private:
     double leftTurn=0.;
     double rightTurn=0.;
     void calcTransform(cv::Mat &image,double angle,Qt::Axis axis);
+    bool onlyOne=false;
+    bool isLeft=false;
 };
 

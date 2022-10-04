@@ -13,7 +13,7 @@ public:
     ~GrabOpenCV();
     Q_INVOKABLE void start(int numb);
     Q_INVOKABLE void photoName(QString name);
-
+    Q_INVOKABLE void stop();
 signals:
     void newSample(cv::Mat mat);
 
@@ -21,7 +21,7 @@ public slots:
     void execute();
 
 private:
-    cv::VideoCapture cap;
+    cv::VideoCapture* cap;
     bool video=false;
     cv::Mat frame;
 };
