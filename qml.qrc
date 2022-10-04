@@ -16,7 +16,6 @@
         <file>Angle.qml</file>
         <file>TRotation.qml</file>
         <file>ImageDraw.qml</file>
-        <file>ImageDraw2.qml</file>
         <file>SomeRec.qml</file>
     </qresource>
     <qresource prefix="/cross"/>
