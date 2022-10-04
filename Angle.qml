@@ -9,8 +9,8 @@ Item{
         id: rec
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.scale*4
-        height: parent.scale*3
+        width: parent.scale*4*ratio
+        height: parent.scale*3*ratio
         color: "transparent"
         border.width: 3
         border.color: parent.color

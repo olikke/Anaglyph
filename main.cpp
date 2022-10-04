@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTimer>
 #include <QIcon>
+#include <QGuiApplication>
+#include <QScreen>
 #include "imageprovider.h"
 #include "imagepro.h"
 #include "grabOpenCV.h"
@@ -12,15 +14,30 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setOrganizationName("Some organization");
+    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    QGuiApplication::setOrganizationName("Some organization");
 
-    QApplication app(argc, argv);
+     QGuiApplication app(argc, argv);
+
+     auto screen = QGuiApplication::primaryScreen();
+     QRect currScreen = screen->geometry();
+     const qreal dpi = screen->logicalDotsPerInch();
+
+     const double refDpi = 96;
+     const double refHeight = 1440;
+     const double refWidth = 2560;
+
+     qreal m_extentsRatio = qMin( currScreen.height() / refHeight, currScreen.width() / refWidth );
+     qreal m_fontsRatio = qMin( currScreen.height() * refDpi / ( dpi * refHeight ), currScreen.width() * refDpi / ( dpi * refWidth ) );
+    qDebug()<<m_extentsRatio<<m_fontsRatio;
 
     app.setWindowIcon(QIcon(":/icon/glass.png"));
 
     QQmlApplicationEngine * engine=new QQmlApplicationEngine(&app);
     QQmlContext *context = engine->rootContext();
+
+    context->setContextProperty("ratio",m_extentsRatio);
+    context->setContextProperty("fontsRatio",m_fontsRatio);
 
     CamFinder* camFinder=new CamFinder(&app);
     context->setContextProperty("camFinder",camFinder);

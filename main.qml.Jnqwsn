@@ -16,11 +16,31 @@ Window {
     Component.onCompleted: {
         Material.theme=Material.Dark
         Material.accent=accent
-        console.log(Screen.width)
-        console.log(Screen.devicePixelRatio)
+
     }
 
-    property int _pointSize: 14*fontsRatio
+   Rectangle{
+        x:0
+        y:0
+        width: parent.width/8.5
+        height: 20
+        Text {
+            text: "Открыть видео"
+            font.pointSize:20
+            color: foreground
+            font.family: "Sans Serif"
+            font.capitalization: Font.AllUppercase
+            onWidthChanged: {
+                width>parent.width/2?
+                        font.pointSize=font.pointSize-1:
+                            textSize=font.pointSize
+
+            }
+        }
+
+    }
+
+    property int textSize: 20
     property string background: "#2d2d2d"
     property string primary: "#474747"
     property string accent: "#039be5"

@@ -8,10 +8,11 @@ Row {
     spacing: 5
 
     Rectangle{
-        width: 300
+        width: 300*ratio
         height: parent.height
         color: background
         radius: 3
+        onWidthChanged: console.log("ww",width)
 
         Column{
             id: control
@@ -21,8 +22,7 @@ Row {
 
             Text {
                 text: "Открыть видео"
-                width: 20
-                font.pixelSize: 14
+                font.pointSize:_pointSize
                 color: foreground
                 font.family: "Sans Serif"
                 font.capitalization: Font.AllUppercase
@@ -35,7 +35,8 @@ Row {
 
                 ComboBox{
                     id: cb1
-                    height: 40
+                    font.pointSize: _pointSize
+                    height: 40*ratio
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -43,7 +44,8 @@ Row {
 
                 ComboBox{
                     id: cb2
-                    height: 40
+                    font.pointSize: _pointSize
+                    height: 40*ratio
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -59,7 +61,8 @@ Row {
                     id: start
                     text: "Стерео"
                     width: (parent.width-parent.spacing*2)/3
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
                         rightGrab.start(cb2.currentIndex)
@@ -72,7 +75,8 @@ Row {
                     id: stop
                     text: "Стоп"
                     width: (parent.width-parent.spacing*2)/3
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         timer.stop()
                         leftGrab.stop()
@@ -83,7 +87,8 @@ Row {
                 Button{
                     text: "Запись"
                     width: (parent.width-parent.spacing*2)/3
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         сonsole.log("начать запись")
                     }
@@ -99,8 +104,7 @@ Row {
 
             Text {
                 text: "Открыть фото"
-                width: 20
-                font.pixelSize: 14
+                font.pointSize: _pointSize
                 color: foreground
                 font.family: "Sans Serif"
                 font.capitalization: Font.AllUppercase
@@ -115,7 +119,8 @@ Row {
                     id: leftOpen
                     text: "Левое"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         openDialog.title="Открыть левое изображение"
                         openDialog.left=true
@@ -127,7 +132,8 @@ Row {
                     id: rightOpen
                     text: "Правое"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         openDialog.title="Открыть правое изображение"
                         openDialog.left=false
@@ -144,7 +150,8 @@ Row {
                 Button{
                     text: "Старт"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(-1)
                         rightGrab.start(-1)
@@ -155,7 +162,8 @@ Row {
                 Button{
                     text: "Стоп"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         timer.stop()
                     }
@@ -176,8 +184,7 @@ Row {
 
                 Text {
                     text: "Cмещение"
-                    width: 20
-                    font.pixelSize: 14
+                    font.pointSize: _pointSize
                     color: foreground
                     font.family: "Sans Serif"
                     font.capitalization: Font.AllUppercase
@@ -210,8 +217,7 @@ Row {
 
                 Text {
                     text: "Поворот не туда"
-                    width: 20
-                    font.pixelSize: 14
+                    font.pointSize: _pointSize
                     color: foreground
                     font.family: "Sans Serif"
                     font.capitalization: Font.AllUppercase
@@ -243,8 +249,7 @@ Row {
 
                 Text {
                     text: "Наклон туда"
-                    width: 20
-                    font.pixelSize: 14
+                    font.pointSize: _pointSize
                     color: foreground
                     font.family: "Sans Serif"
                     font.capitalization: Font.AllUppercase
@@ -276,8 +281,7 @@ Row {
 
                 Text {
                     text: "Наклон сюда"
-                    width: 20
-                    font.pixelSize: 14
+                    font.pointSize: _pointSize
                     color: foreground
                     font.family: "Sans Serif"
                     font.capitalization: Font.AllUppercase
@@ -310,8 +314,7 @@ Row {
 
             Text {
                 text: "Фокусировка"
-                width: 20
-                font.pixelSize: 14
+                font.pointSize: _pointSize
                 color: foreground
                 font.family: "Sans Serif"
                 font.capitalization: Font.AllUppercase
@@ -325,7 +328,8 @@ Row {
                 Button{
                     text: "Левая"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
                         anaglyph.setOnlyOne(true,true)
@@ -333,11 +337,11 @@ Row {
                     }
                 }
 
-
                 Button{
                     text: "Правая"
                     width: parent.width/2-5
-                    height: 40
+                    height: 40*ratio
+                    font.pointSize: _pointSize
                     onClicked: {
                         rightGrab.start(cb2.currentIndex)
                         anaglyph.setOnlyOne(true,false)
@@ -345,7 +349,6 @@ Row {
                     }
                 }
             }
-
         }
     }
 

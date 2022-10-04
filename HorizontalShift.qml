@@ -12,8 +12,8 @@ Item{
         anchors.verticalCenterOffset: parent.zeroShift
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: -parent.zeroShift-(parent.fshift*width/4)
-        width: parent.scale*4
-        height: parent.scale*3
+        width: parent.scale*4*ratio
+        height: parent.scale*3*ratio
         color: "transparent"
         border.color: red
         border.width: 3
@@ -25,8 +25,8 @@ Item{
         anchors.verticalCenterOffset: -parent.zeroShift
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: parent.zeroShift+parent.fshift*width/4
-        width: parent.scale*4
-        height: parent.scale*3
+        width: parent.scale*4*ratio
+        height: parent.scale*3*ratio
         color: "transparent"
         border.color: blue
         border.width: 3

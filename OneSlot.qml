@@ -8,6 +8,7 @@ Row{
     id: root
     width: parent.width
     height: implicitHeight
+    spacing: 0
 
     signal leftSignal(int value)
     signal rightSignal(int value)
@@ -31,8 +32,8 @@ Row{
 
     Item{
         id: left
-        width: 100
-        height: 120
+        width: 100*ratio
+        height: 120*ratio
 
         Column{
             anchors.left: parent.left
@@ -43,14 +44,14 @@ Row{
 
             Item{
                 id: image1
-                width: 64
+                width: 64*ratio
                 height: parent.height-txt1.height*2
             }
 
             Text{
                 id: txt1
                 text: sl1.value.toFixed(1)
-                font.pixelSize: 16
+                font.pointSize: _pointSize
                 font.bold: true
                 color: accent
                 font.capitalization: Font.AllUppercase
@@ -63,7 +64,7 @@ Row{
             anchors.right: parent.right
             anchors.rightMargin: 0
             orientation: Qt.Vertical
-            width: 30
+            width: 30*ratio
             height: parent.height
             from: root.from
             stepSize: root.step
@@ -81,26 +82,30 @@ Row{
     }
 
     Item{
-        width: parent.sp
+        width: parent.width-left.width-right.width
         height: parent.height
         Column{
-            width: 64
+            width: 64*ratio
             height: implicitHeight
             anchors.horizontalCenter: parent.horizontalCenter
             spacing:5
             Button{
                 id: lock
-                width: 64
-                height: 48
+                width: 64*ratio
+                height: 48*ratio
+                font.pointSize: _pointSize
                 icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
+                icon.width: parent.width
+                icon.height: parent.height
                 onClicked: locked=!locked
                 enabled: !root.alwaysLocked
             }
 
             Button{
-                width: 64
-                height: 48
+                width: 64*ratio
+                height: 48*ratio
                 text: "zero"
+                font.pointSize: _pointSize
                 onClicked: sl1.value=sl2.value=0
             }
         }
@@ -108,8 +113,8 @@ Row{
 
     Item{
         id: right
-        width: 100
-        height: 120
+        width: 100*ratio
+        height: 120*ratio
 
         Column{
             width: 64
@@ -126,7 +131,7 @@ Row{
             Text{
                 id: txt2
                 text: sl2.value.toFixed(1)
-                font.pixelSize: 16
+                font.pointSize: _pointSize
                 font.bold: true
                 color: accent
                 font.capitalization: Font.AllUppercase
@@ -139,7 +144,7 @@ Row{
             anchors.left: parent.left
             anchors.leftMargin: 10
             orientation: Qt.Vertical
-            width: 30
+            width: 30*ratio
             height: parent.height
             from: root.from
             stepSize: root.step
