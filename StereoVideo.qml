@@ -36,7 +36,7 @@ Row {
                 ComboBox{
                     id: cb1
                     font.pointSize: _pointSize
-                    height: 40*ratio
+                 //   height: 40*ratio
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -45,7 +45,7 @@ Row {
                 ComboBox{
                     id: cb2
                     font.pointSize: _pointSize
-                    height: 40*ratio
+                  //  height: 40*ratio
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -60,8 +60,8 @@ Row {
                 Button{
                     id: start
                     text: "Стерео"
-                    width: (parent.width-parent.spacing*2)/3
-                    height: 40*ratio
+                    width: (parent.width-parent.spacing)/2
+                   // height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
@@ -74,8 +74,8 @@ Row {
                 Button{
                     id: stop
                     text: "Стоп"
-                    width: (parent.width-parent.spacing*2)/3
-                    height: 40*ratio
+                    width: (parent.width-parent.spacing)/2
+                  //  height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         timer.stop()
@@ -83,14 +83,31 @@ Row {
                         rightGrab.stop();
                     }
                 }
+            }
+
+            Row{
+                width: parent.width
+                height: implicitHeight
+                spacing: 10
 
                 Button{
-                    text: "Запись"
-                    width: (parent.width-parent.spacing*2)/3
-                    height: 40*ratio
+                    id: snapshot
+                    text: "СКРИН"
+                    width: (parent.width-parent.spacing)/2
+                  //  height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
-                        сonsole.log("начать запись")
+                    }
+                }
+
+                Button{
+                    id: record
+                    text: "ЗАПИСЬ"
+                    width: (parent.width-parent.spacing)/2
+                  //  height: 40*ratio
+                    font.pointSize: _pointSize
+                    onClicked: {
+
                     }
                 }
             }
@@ -119,7 +136,7 @@ Row {
                     id: leftOpen
                     text: "Левое"
                     width: parent.width/2-5
-                    height: 40*ratio
+                 //   height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         openDialog.title="Открыть левое изображение"
@@ -132,7 +149,7 @@ Row {
                     id: rightOpen
                     text: "Правое"
                     width: parent.width/2-5
-                    height: 40*ratio
+                 //   height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         openDialog.title="Открыть правое изображение"
@@ -150,7 +167,7 @@ Row {
                 Button{
                     text: "Старт"
                     width: parent.width/2-5
-                    height: 40*ratio
+                  //  height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(-1)
@@ -162,7 +179,7 @@ Row {
                 Button{
                     text: "Стоп"
                     width: parent.width/2-5
-                    height: 40*ratio
+                 //   height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         timer.stop()
@@ -328,7 +345,7 @@ Row {
                 Button{
                     text: "Левая"
                     width: parent.width/2-5
-                    height: 40*ratio
+                //    height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
@@ -340,7 +357,7 @@ Row {
                 Button{
                     text: "Правая"
                     width: parent.width/2-5
-                    height: 40*ratio
+                //    height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         rightGrab.start(cb2.currentIndex)
@@ -360,26 +377,29 @@ Row {
         Rectangle{
             id: buttons
             width: parent.width
-            height: 60
+            height: some.height+20
             radius: 3
             color: background
+            onHeightChanged: console.log("rec",height)
 
             Row{
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 5
+                onHeightChanged: console.log("some",height)
 
                 Button{
+                    id: some
                     text: imDraw.redactorEnable? "Стоп" :"Старт"
                     width: 80
-                    height: 40
+                    font.pointSize: _pointSize
                     onClicked: imDraw.redactorEnable=!imDraw.redactorEnable
                 }
 
                 Button{
                     text: "Убрать"
                     width: 80
-                    height: 40
+                    font.pointSize: _pointSize
                     onClicked: imDraw.clear()
                 }
             }

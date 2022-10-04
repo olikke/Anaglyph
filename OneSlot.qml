@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.0
 Row{
     id: root
     width: parent.width
-    height: implicitHeight
+    height: Math.max(row1.height,btn.height)
     spacing: 0
 
     signal leftSignal(int value)
@@ -32,78 +32,78 @@ Row{
 
     Item{
         id: left
-        width: 100*ratio
-        height: 120*ratio
+        width: parent.width/3
+        height: parent.height
 
-        Column{
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            width: 64
-            height: parent.height
+        Row{
+            id: row1
+            width: parent.width
+            height: implicitHeight
+            anchors.verticalCenter: parent.verticalCenter
             spacing: 5
 
-            Item{
-                id: image1
-                width: 64*ratio
-                height: parent.height-txt1.height*2
+            Column{
+                width: parent.width-sl2.width-parent.spacing
+                height: implicitHeight
+                anchors.verticalCenter: parent.verticalCenter
+
+                Item{
+                    id: image1
+                    width: 64*ratio
+                    height: width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Text{
+                    id: txt1
+                    text: sl1.value.toFixed(1)
+                    font.pointSize: _pointSize
+                    font.bold: true
+                    color: accent
+                    font.capitalization: Font.AllUppercase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
 
-            Text{
-                id: txt1
-                text: sl1.value.toFixed(1)
-                font.pointSize: _pointSize
-                font.bold: true
-                color: accent
-                font.capitalization: Font.AllUppercase
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-
-        Slider{
-            id: sl1
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            orientation: Qt.Vertical
-            width: 30*ratio
-            height: parent.height
-            from: root.from
-            stepSize: root.step
-            to:root.to
-            value: 0
-            onValueChanged: {
-                if (locked) {
-                    sl2.value=sl1.value
+            Slider{
+                id: sl1
+                orientation: Qt.Vertical
+                width: 30*ratio
+                height: root.height
+                from: root.from
+                stepSize: root.step
+                to:root.to
+                value: 0
+                onValueChanged: {
+                    if (locked) {
+                        sl2.value=sl1.value
+                        leftSignal(value/root.step)
+                        rightSignal(value/root.step)
+                    } else
                     leftSignal(value/root.step)
-                    rightSignal(value/root.step)
-                } else
-                leftSignal(value/root.step)
+                }
             }
         }
     }
 
     Item{
-        width: parent.width-left.width-right.width
+        width: parent.width/3
         height: parent.height
         Column{
-            width: 64*ratio
+            id: btn
+            width: parent.width
             height: implicitHeight
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing:5
             Button{
                 id: lock
-                width: 64*ratio
-                height: 48*ratio
+                width: parent.width
                 font.pointSize: _pointSize
                 icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
-                icon.width: parent.width
-                icon.height: parent.height
                 onClicked: locked=!locked
                 enabled: !root.alwaysLocked
             }
 
             Button{
-                width: 64*ratio
-                height: 48*ratio
+                width: parent.width
                 text: "zero"
                 font.pointSize: _pointSize
                 onClicked: sl1.value=sl2.value=0
@@ -113,50 +113,56 @@ Row{
 
     Item{
         id: right
-        width: 100*ratio
-        height: 120*ratio
+        width: parent.width/3
+        height: parent.height
 
-        Column{
-            width: 64
-            height: parent.height
+        Row{
+            id: row2
+            width: parent.width
+            height: implicitHeight
+            anchors.verticalCenter: parent.verticalCenter
             spacing: 5
-            anchors.right: parent.right
 
-            Item{
-                id: image2
-                width: 64
-                height: parent.height-txt2.height*2
-            }
-
-            Text{
-                id: txt2
-                text: sl2.value.toFixed(1)
-                font.pointSize: _pointSize
-                font.bold: true
-                color: accent
-                font.capitalization: Font.AllUppercase
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-
-        Slider{
-            id: sl2
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            orientation: Qt.Vertical
-            width: 30*ratio
-            height: parent.height
-            from: root.from
-            stepSize: root.step
-            to:root.to
-            value: 0
-            onValueChanged: {
-                if (locked) {
-                    sl1.value=sl2.value
-                    leftSignal(value/root.step)
+            Slider{
+                id: sl2
+                orientation: Qt.Vertical
+                width: 30*ratio
+                height: root.height
+                from: root.from
+                stepSize: root.step
+                to:root.to
+                value: 0
+                onValueChanged: {
+                    if (locked) {
+                        sl1.value=sl2.value
+                        leftSignal(value/root.step)
+                        rightSignal(value/root.step)
+                    } else
                     rightSignal(value/root.step)
-                } else
-                rightSignal(value/root.step)
+                }
+            }
+
+            Column{
+                width: parent.width-sl2.width-parent.spacing
+                height: implicitHeight
+                anchors.verticalCenter: parent.verticalCenter
+
+                Item{
+                    id: image2
+                    width: 64*ratio
+                    height: width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Text{
+                    id: txt2
+                    text: sl2.value.toFixed(1)
+                    font.pointSize: _pointSize
+                    font.bold: true
+                    color: accent
+                    font.capitalization: Font.AllUppercase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
