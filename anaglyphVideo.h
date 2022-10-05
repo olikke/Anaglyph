@@ -29,6 +29,9 @@ public:
 
     Q_INVOKABLE void saveScreen(QString name);
 
+    Q_INVOKABLE void startDrawCursor(bool val) {drawCursor=val;}
+    Q_INVOKABLE void setMousePos(int x, int y) {mouseX=x; mouseY=y;}
+
 signals:
     void newSample(QImage im);
     void newFrame(cv::Mat im);
@@ -56,5 +59,7 @@ private:
     bool isLeft=false;
     QString fileName="";
     bool startRec=false;
+    bool drawCursor=false;
+    int mouseX,mouseY;
 };
 

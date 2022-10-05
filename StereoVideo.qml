@@ -415,8 +415,8 @@ Row {
             Image{
                 id: im
                 property bool byVertical: parent.width/1920>parent.height/1080
-                width:   byVertical?  1920/1080*parent.height  :  parent.width
-                height: byVertical? 1080/1920*parent.width : parent.height
+                width:   1920//byVertical?  1920/1080*parent.height  :  parent.width
+                height: 1080//byVertical? 1080/1920*parent.width : parent.height
                 cache: false
                 smooth: true
                 autoTransform: false
@@ -433,13 +433,24 @@ Row {
                 }
             }
             MouseArea{
+                enabled: !imDraw.redactorEnable
                 property bool fullscreen: false
+                onFullscreenChanged:
+                    anaglyph.startDrawCursor(fullscreen)
                 anchors.fill: im
+                cursorShape: fullscreen? Qt.BlankCursor : Qt.ArrowCursor
+                hoverEnabled: true
                 onDoubleClicked: {
                     fullscreen=!fullscreen
                     controlMain.width=fullscreen? 0 : 300*ratio
                     buttons.height=fullscreen? 0: some.height+20
                     appWindow.visibility=fullscreen? ApplicationWindow.FullScreen : ApplicationWindow.Windowed
+                }
+                onMouseXChanged: {
+                    anaglyph.setMousePos(mouseX,mouseY)
+                }
+                onMouseYChanged: {
+                    anaglyph.setMousePos(mouseX,mouseY)
                 }
             }
         }
