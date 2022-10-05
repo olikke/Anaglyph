@@ -4,20 +4,19 @@
 #include <QObject>
 #include <QTimer>
 #include <QIcon>
-#include <QGuiApplication>
 #include <QScreen>
 #include "imageprovider.h"
 #include "imagepro.h"
 #include "grabOpenCV.h"
 #include "anaglyphVideo.h"
 #include "camfinder.h"
+#include "writeopencv.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-    QGuiApplication::setOrganizationName("Some organization");
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 
-     QGuiApplication app(argc, argv);
+     QApplication app(argc, argv);
 
      auto screen = QGuiApplication::primaryScreen();
      QRect currScreen = screen->geometry();
@@ -29,7 +28,6 @@ int main(int argc, char *argv[])
 
      qreal m_extentsRatio = qMin( currScreen.height() / refHeight, currScreen.width() / refWidth );
      qreal m_fontsRatio = qMin( currScreen.height() * refDpi / ( dpi * refHeight ), currScreen.width() * refDpi / ( dpi * refWidth ) );
-    qDebug()<<m_extentsRatio<<m_fontsRatio;
 
     app.setWindowIcon(QIcon(":/icon/glass.png"));
 
@@ -43,7 +41,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("camFinder",camFinder);
 
     QTimer* timer=new QTimer(&app);
-    timer->setInterval(80);
+    timer->setInterval(40);
     context->setContextProperty("timer",timer);
 
     GrabOpenCV* left=new GrabOpenCV(&app);
@@ -54,10 +52,16 @@ int main(int argc, char *argv[])
     context->setContextProperty("rightGrab",right);
     QObject::connect(timer,&QTimer::timeout,right,&GrabOpenCV::execute);
 
+    WriteOpenCV* writeOpenCV=new WriteOpenCV(&app);
+    context->setContextProperty("writer",writeOpenCV);
+
     AnaglyphVideo* anaglyphVideo=new AnaglyphVideo(&app);
     QObject::connect(left,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::leftSample);
     QObject::connect(right,&GrabOpenCV::newSample,anaglyphVideo,&AnaglyphVideo::rightSample);
     context->setContextProperty("anaglyph",anaglyphVideo);
+
+    QObject::connect(writeOpenCV,&WriteOpenCV::startRecord,anaglyphVideo,&AnaglyphVideo::startRecord);
+    QObject::connect(anaglyphVideo,&AnaglyphVideo::newFrame,writeOpenCV,&WriteOpenCV::newFrame);
 
     ImageProvider* provider=new ImageProvider(&app,QSize(1920,1080));
     context->setContextProperty("videoProvider",provider);

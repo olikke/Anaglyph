@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 import "."
 
 Window {
+    id: appWindow
     visible: true
     width: Screen.width
     height: Screen.height
@@ -16,8 +17,6 @@ Window {
     Component.onCompleted: {
         Material.theme=Material.Dark
         Material.accent=accent
-        console.log(Screen.width)
-        console.log(Screen.devicePixelRatio)
     }
 
     property int _pointSize: 14*fontsRatio
@@ -43,13 +42,31 @@ Window {
         }
     }
 
-    SwipeView{
-        currentIndex: 0
-        anchors.fill: parent
-     //   anchors.margins: 10
+    FileDialog {
+        id: saveDialog
+        title: "Сохранить файл"
+        folder: _lastfolder
+        selectExisting: false
+        nameFilters: [ "Image files (*.bmp *.jpg *.png *.jpeg)"  ]
+        onAccepted: {
+            anaglyph.saveScreen(fileUrl)
+            _lastfolder=fileUrl
+        }
+    }
+
+    FileDialog {
+        id: writeDialog
+        title: "Запись видео"
+        folder: _lastfolder
+        selectExisting: false
+        nameFilters: [ "Video files (*.avi)"  ]
+        onAccepted: {
+               writer.start(fileUrl)
+            _lastfolder=fileUrl
+        }
+    }
 
         StereoVideo{
+            anchors.fill: parent
         }
-
-    }
 }

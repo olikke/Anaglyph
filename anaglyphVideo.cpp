@@ -1,5 +1,14 @@
 #include "anaglyphVideo.h"
 
+void AnaglyphVideo::saveScreen(QString name)
+{
+    if (name.contains("file:///"))
+    {
+        name.remove(0,7);
+    }
+    fileName=name;
+}
+
 void AnaglyphVideo::leftSample(cv::Mat im)
 {
     left=im.clone();
@@ -87,6 +96,14 @@ void AnaglyphVideo::timeOut()
     cv::Mat result=cv::Mat(right.rows,right.cols,CV_8UC4);
 
     cv::addWeighted(right, 1, left, 1, 0,result);
+
+    if (!fileName.isEmpty()) {
+        cv::imwrite(fileName.toLatin1().constData(),result);
+        fileName="";
+    }
+
+    if (startRec)
+        emit newFrame(result);
 
     cv::cvtColor(result,result,CV_BGR2RGB);
     resultQIM=QImage((uchar*)result.data, result.cols, result.rows, result.step, QImage::Format_RGB888);

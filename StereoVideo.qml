@@ -8,11 +8,11 @@ Row {
     spacing: 5
 
     Rectangle{
+        id: controlMain
         width: 300*ratio
         height: parent.height
         color: background
         radius: 3
-        onWidthChanged: console.log("ww",width)
 
         Column{
             id: control
@@ -35,8 +35,7 @@ Row {
 
                 ComboBox{
                     id: cb1
-                    font.pointSize: _pointSize
-                 //   height: 40*ratio
+                    font.pointSize: _pointSize*0.9
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -44,8 +43,7 @@ Row {
 
                 ComboBox{
                     id: cb2
-                    font.pointSize: _pointSize
-                  //  height: 40*ratio
+                    font.pointSize: _pointSize*0.9
                     width: parent.width/2-5
                     model: camFinder.model
                     currentIndex: -1
@@ -61,7 +59,6 @@ Row {
                     id: start
                     text: "Стерео"
                     width: (parent.width-parent.spacing)/2
-                   // height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         leftGrab.start(cb1.currentIndex)
@@ -75,7 +72,6 @@ Row {
                     id: stop
                     text: "Стоп"
                     width: (parent.width-parent.spacing)/2
-                  //  height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
                         timer.stop()
@@ -94,20 +90,20 @@ Row {
                     id: snapshot
                     text: "СКРИН"
                     width: (parent.width-parent.spacing)/2
-                  //  height: 40*ratio
                     font.pointSize: _pointSize
                     onClicked: {
+                        saveDialog.title="Сохранить стерео"
+                        saveDialog.open()
                     }
                 }
 
                 Button{
                     id: record
-                    text: "ЗАПИСЬ"
-                    width: (parent.width-parent.spacing)/2
-                  //  height: 40*ratio
+                    text:  writer.isRecord?   "СТОП" :  "ЗАПИСЬ"
                     font.pointSize: _pointSize
+                    width: (parent.width-parent.spacing)/2
                     onClicked: {
-
+                        writer.isRecord? writer.stop() : writeDialog.open()
                     }
                 }
             }
@@ -380,25 +376,23 @@ Row {
             height: some.height+20
             radius: 3
             color: background
-            onHeightChanged: console.log("rec",height)
 
             Row{
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 5
-                onHeightChanged: console.log("some",height)
 
                 Button{
                     id: some
                     text: imDraw.redactorEnable? "Стоп" :"Старт"
-                    width: 80
+                    width: 100*ratio
                     font.pointSize: _pointSize
                     onClicked: imDraw.redactorEnable=!imDraw.redactorEnable
                 }
 
                 Button{
                     text: "Убрать"
-                    width: 80
+                    width: 100*ratio
                     font.pointSize: _pointSize
                     onClicked: imDraw.clear()
                 }
@@ -413,6 +407,11 @@ Row {
         Item{
             width: parent.width
             height: parent.height-buttons.height
+            Rectangle{
+                anchors.fill: parent
+                color: primary
+            }
+
             Image{
                 id: im
                 property bool byVertical: parent.width/1920>parent.height/1080
@@ -429,9 +428,18 @@ Row {
                     source= ""
                     source = "image://mlive/image"
                 }
-
                 ImageDraw{
                     id: imDraw
+                }
+            }
+            MouseArea{
+                property bool fullscreen: false
+                anchors.fill: im
+                onDoubleClicked: {
+                    fullscreen=!fullscreen
+                    controlMain.width=fullscreen? 0 : 300*ratio
+                    buttons.height=fullscreen? 0: some.height+20
+                    appWindow.visibility=fullscreen? ApplicationWindow.FullScreen : ApplicationWindow.Windowed
                 }
             }
         }

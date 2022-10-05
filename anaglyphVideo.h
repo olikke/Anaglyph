@@ -27,11 +27,15 @@ public:
     Q_INVOKABLE void setOnlyOne(bool vOnlyOne, bool vLeft) {onlyOne=vOnlyOne; isLeft=vLeft;}
     Q_INVOKABLE void setBoth() {onlyOne=false;}
 
+    Q_INVOKABLE void saveScreen(QString name);
+
 signals:
     void newSample(QImage im);
+    void newFrame(cv::Mat im);
 public slots:
     void leftSample(cv::Mat im);
     void rightSample(cv::Mat im);
+    void startRecord(bool start) {startRec=start;}
 private:
     cv::Mat left;
     cv::Mat right;
@@ -50,5 +54,7 @@ private:
     void calcTransform(cv::Mat &image,double angle,Qt::Axis axis);
     bool onlyOne=false;
     bool isLeft=false;
+    QString fileName="";
+    bool startRec=false;
 };
 
