@@ -29,8 +29,7 @@ public:
 
     Q_INVOKABLE void saveScreen(QString name);
 
-    Q_INVOKABLE void startDrawCursor(bool val) {drawCursor=val;}
-    Q_INVOKABLE void setMousePos(int x, int y) {mouseX=x; mouseY=y;}
+    Q_INVOKABLE void setText(QString value, int dist) {text=value; textDist=dist;}
 
 signals:
     void newSample(QImage im);
@@ -59,7 +58,7 @@ private:
     bool isLeft=false;
     QString fileName="";
     bool startRec=false;
-    bool drawCursor=false;
-    int mouseX,mouseY;
+    QString text="";
+    int textDist=0;
 };
 

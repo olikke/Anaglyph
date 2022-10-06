@@ -93,6 +93,11 @@ void AnaglyphVideo::timeOut()
     if (!qFuzzyIsNull(rightTurn))
         calcTransform(right,rightTurn,Qt::YAxis);
 
+    if (!text.isEmpty()) {
+        cv::putText(left,text.toLatin1().constData(),cv::Point(100-textDist/2,100),cv::FONT_HERSHEY_PLAIN,2,cv::Scalar(0,0,255));
+        cv::putText(right,text.toLatin1().constData(),cv::Point(100+textDist/2,100),cv::FONT_HERSHEY_PLAIN,2,cv::Scalar(255,255,0));
+    }
+
     cv::Mat result=cv::Mat(right.rows,right.cols,CV_8UC4);
 
     cv::addWeighted(right, 1, left, 1, 0,result);

@@ -20,6 +20,7 @@ Window {
     }
 
     property int _pointSize: 14*fontsRatio
+    property int _elementHeight: 45*ratio
     property string background: "#2d2d2d"
     property string primary: "#474747"
     property string accent: "#039be5"
@@ -61,12 +62,11 @@ Window {
         selectExisting: false
         nameFilters: [ "Video files (*.avi)"  ]
         onAccepted: {
-               writer.start(fileUrl)
+            writer.start(fileUrl)
             _lastfolder=fileUrl
         }
     }
-
-        StereoVideo{
-            anchors.fill: parent
-        }
+    StereoVideo{
+        anchors.fill: parent
+    }
 }

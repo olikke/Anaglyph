@@ -96,6 +96,7 @@ Row{
             Button{
                 id: lock
                 width: parent.width
+                height:_elementHeight
                 font.pointSize: _pointSize
                 icon.source: locked? "qrc:/icon/lock.png" : "qrc:/icon/unlock.png"
                 onClicked: locked=!locked
@@ -104,6 +105,7 @@ Row{
 
             Button{
                 width: parent.width
+                height:_elementHeight
                 text: "zero"
                 font.pointSize: _pointSize
                 onClicked: sl1.value=sl2.value=0

@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
      const qreal dpi = screen->logicalDotsPerInch();
 
      const double refDpi = 96;
-     const double refHeight = 1440;
-     const double refWidth = 2560;
+     const double refHeight = 1080;//1440;
+     const double refWidth =1920;// 2560;
 
      qreal m_extentsRatio = qMin( currScreen.height() / refHeight, currScreen.width() / refWidth );
      qreal m_fontsRatio = qMin( currScreen.height() * refDpi / ( dpi * refHeight ), currScreen.width() * refDpi / ( dpi * refWidth ) );
