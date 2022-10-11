@@ -3,7 +3,7 @@ QT += gui
 CONFIG += c++11
 QT += multimedia
 QT += widgets
-CONFIG += link_pkgconfig
+#CONFIG += link_pkgconfig
 PKGCONFIG += opencv
 QT += concurrent
 
@@ -51,6 +51,18 @@ HEADERS += \
     grabOpenCV.h \
     camfinder.h \
     writeopencv.h
+
+unix|win32: LIBS += -lopencv_core
+
+unix|win32: LIBS += -lopencv_video
+
+unix|win32: LIBS += -lopencv_highgui
+
+unix|win32: LIBS += -lopencv_imgproc
+
+unix|win32: LIBS += -lopencv_features2d
+
+unix|win32: LIBS += -lopencv_calib3d
 
 unix|win32: LIBS += -lgstreamer-1.0
 

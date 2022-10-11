@@ -18,13 +18,18 @@ int main(int argc, char *argv[])
 
      QApplication app(argc, argv);
 
+     qDebug()<< "OpenCV version : " << CV_VERSION << endl;
+     qDebug()<< "Major version : " << CV_MAJOR_VERSION << endl;
+     qDebug()<< "Minor version : " << CV_MINOR_VERSION << endl;
+     qDebug() << "Subminor version : " << CV_SUBMINOR_VERSION << endl;
+
      auto screen = QGuiApplication::primaryScreen();
      QRect currScreen = screen->geometry();
      const qreal dpi = screen->logicalDotsPerInch();
 
      const double refDpi = 96;
-     const double refHeight = 1080;//1440;
-     const double refWidth =1920;// 2560;
+     const double refHeight = 1440;
+     const double refWidth =2560;
 
      qreal m_extentsRatio = qMin( currScreen.height() / refHeight, currScreen.width() / refWidth );
      qreal m_fontsRatio = qMin( currScreen.height() * refDpi / ( dpi * refHeight ), currScreen.width() * refDpi / ( dpi * refWidth ) );
